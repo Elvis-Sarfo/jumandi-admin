@@ -1,0 +1,30 @@
+// Here you can add other styles
+    // Colors
+.s-bg-color{
+    background-color: $secondary-base !important;
+}
+.p-bg-color{
+  background-color: $primary-base !important;
+}
+.p-color{
+  color: $primary-base!important;
+}
+.s-color{
+  color: $secondary-base!important;
+}
+
+.sidebar-nav .nav-link {
+    font-size: large;
+}
+
+.sidebar-nav .nav-link.active,
+.sidebar-nav .nav-link:hover{
+    color: $secondary-base;
+    // background: #00366c7a;
+    background: $primary-base;
+}
+
+.sidebar-nav .nav-link.active .nav-icon,
+.sidebar-nav .nav-link:hover .nav-icon {
+    color: $secondary-base;
+}
