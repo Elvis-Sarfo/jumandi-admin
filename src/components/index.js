@@ -7,6 +7,9 @@ import AppSidebar from './AppSidebar'
 import DocsCallout from './DocsCallout'
 import DocsLink from './DocsLink'
 import DocsExample from './DocsExample'
+import CustomDataTable from './CustomDataTable'
+import ChartWidget from './ChartWidget'
+import MatDataTable from './MatDataTable'
 
 export {
   AppBreadcrumb,
@@ -18,4 +21,7 @@ export {
   DocsCallout,
   DocsLink,
   DocsExample,
+  CustomDataTable,
+  ChartWidget,
+  MatDataTable,
 }

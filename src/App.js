@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
+import 'bootstrap/dist/css/bootstrap.css';
 import './scss/style.scss'
 
 const loading = (
