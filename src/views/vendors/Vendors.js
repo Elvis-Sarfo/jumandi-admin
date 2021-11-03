@@ -7,6 +7,7 @@ import { firestore as db } from './../../config/firebase'
 import { collection, doc, getDocs, onSnapshot } from '@firebase/firestore';
 import { Icon, Switch } from '@mui/material';
 import { DeleteForever, Visibility, Edit } from '@mui/icons-material';
+import ReactCountryFlag from "react-country-flag"
 
 
 import CIcon from '@coreui/icons-react'
@@ -31,39 +32,78 @@ const Vendors = () => {
     const history = useHistory();
     // Create the states of the component
     const [vendors, setVendors] = useState([]);
+    let [totalVendors, setTotalVendors] = useState(0);
+    let [pendingVendors, setPendingVendors] = useState({
+        percentage: 0,
+        value: 0
+    });
+    let [approvedVendors, setApprovedVendors] = useState({
+        percentage: 0,
+        value: 0
+    });
 
     // Get firebase Firestore reference
-    const collectionRef = collection(db, 'businesses')
+    const collectionRef = collection(db, 'businesses');
 
     // Structure the data that is coming from firebase
-    const getStructuredData = (rawData) => rawData.map((doc) => ({
-        id: doc.id,
-        name: (
-            <>
-                <CAvatar size="md" src={doc.data().pictureURL} status={'success'} />
-                <span style={{ marginLeft: 7 }}> {`${doc.data().firstname} ${doc.data().lastname}`} </span>
+    const getStructuredData = (rawData) => rawData.map((doc) => {
+
+        pendingVendors.value += doc.data().businessStatus?.toLowerCase() == 'pending' ? 1 : 0;
+        approvedVendors.value += doc.data().businessStatus?.toLowerCase() == 'approved' ? 1 : 0;
+
+        return {
+            id: doc.id,
+            id: 1,
+            name: (<>
+                <CAvatar size="md" src={doc.data().businessLogo} status={'success'} />
+                <span style={{ marginLeft: 7 }}>{doc.data().businessName}</span>
             </>
-        ),
-        phone: doc.data().phone,
-        location: doc.data().location || doc.data().placeOfResidence,
-        gender: doc.data().gender.toString().toUpperCase(),
-        status: (<Switch defaultChecked={doc.data().enabled} color="success" />),
-        actions: (
-            <>
-            <CButtonGroup>
-              <CButton onClick={() => history.push(`/supervisors/${doc.id}`)} color="primary"><Visibility /></CButton>
-              <CButton color="warning"><Edit /></CButton>
-              <CButton color="danger"><DeleteForever /></CButton>
-            </CButtonGroup>
-          </>
-        )
-    }));
+            ),
+            location: (<div className="p-1">
+                <div>
+                    <ReactCountryFlag
+                        className="emojiFlag"
+                        countryCode={doc.data().businessLocation?.isoCode}
+                        style={{
+                            fontSize: '1em',
+                            lineHeight: '1em',
+                        }}
+                        aria-label="United States"
+                    />{' '}
+                    {doc.data().businessLocation?.country}
+                </div>
+                <div className="small text-medium-emphasis">
+                    <span>{doc.data().businessLocation?.adminArea}</span><br />
+                    <span>{doc.data().businessLocation?.locality}</span> ,
+                    <span>{doc.data().businessLocation?.name}</span>
+                </div>
+            </div>),
+            status: doc.data().businessStatus,
+            approve: (<Switch defaultChecked={doc.data().businessStatus?.toLowerCase() == 'approved'} color="success" />),
+            actions: (
+                <>
+                    <CButtonGroup>
+                        <CButton onClick={() => history.push(`/supervisors/${doc.id}`)} color="primary"><Visibility /></CButton>
+                        <CButton color="warning"><Edit /></CButton>
+                        <CButton color="danger"><DeleteForever /></CButton>
+                    </CButtonGroup>
+                </>
+            )
+        };
+    });
 
     useEffect(() => {
         onSnapshot(collectionRef, (snapshot) => {
-            console.log(snapshot.docs.map((doc)=>({...doc.data()})));
-            // let _data = getStructuredData(snapshot.docs);
-            console.log(snapshot.docs.map((doc)=>({...doc.data()})));
+            console.log(snapshot.docs.map((doc) => ({ ...doc.data() })));
+            let _data = getStructuredData(snapshot.docs);
+            totalVendors = snapshot.size;
+            pendingVendors.percentage = ((pendingVendors.value / totalVendors) * 100).toFixed(2);
+            approvedVendors.percentage = ((approvedVendors.value / totalVendors) * 100).toFixed(2);;
+
+            setPendingVendors(pendingVendors);
+            setApprovedVendors(approvedVendors);
+            setTotalVendors(totalVendors);
+            setVendors(_data);
         });
     }, [])
 
@@ -123,18 +163,18 @@ const Vendors = () => {
                     <CWidgetStatsB
                         className="mb-3"
                         progress={{ color: 'warning', value: 40 }}
-                        text="40% vendors pending approval"
+                        text={`${pendingVendors.percentage}% vendors Pending`}
                         title="New Requests"
-                        value="20"
+                        value={pendingVendors.value}
                     />
                 </CCol>
                 <CCol xs={4}>
                     <CWidgetStatsB
                         className="mb-3"
                         progress={{ color: 'success', value: 60 }}
-                        text="60% vendors approved"
+                        text={`${approvedVendors.percentage}% vendors Approved`}
                         title="Approved Vendors"
-                        value="30"
+                        value={approvedVendors.value}
                     />
                 </CCol>
                 <CCol xs={4}>
@@ -143,7 +183,7 @@ const Vendors = () => {
                         progress={{ color: 'info', value: 100 }}
                         text="Note: Excluding rejected"
                         title="Total Vendors"
-                        value="50"
+                        value={totalVendors}
                     />
                 </CCol>
             </CRow>
@@ -160,7 +200,7 @@ const Vendors = () => {
                     </CButton>
                 }
                 columns={columns}
-                data={data}
+                data={vendors}
                 onChangePage={(page, totalRows) => {
                     console.log(page, totalRows);
                 }}
