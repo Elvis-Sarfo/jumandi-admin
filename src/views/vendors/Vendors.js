@@ -1,7 +1,14 @@
-import React, { lazy, useState } from 'react'
+import React, { lazy, useState, useEffect } from 'react'
 import { useHistory } from 'react-router-dom';
 import CustomDataTable from "./../../components/CustomDataTable";
 import data from "./test";
+
+import { firestore as db } from './../../config/firebase'
+import { collection, doc, getDocs, onSnapshot } from '@firebase/firestore';
+import { Icon, Switch } from '@mui/material';
+import { DeleteForever, Visibility, Edit } from '@mui/icons-material';
+
+
 import CIcon from '@coreui/icons-react'
 import { cilBell, cilEnvelopeOpen, cilList, cilMenu, cibEx } from '@coreui/icons'
 import {
@@ -22,31 +29,69 @@ import {
 const Vendors = () => {
 
     const history = useHistory();
+    // Create the states of the component
+    const [vendors, setVendors] = useState([]);
+
+    // Get firebase Firestore reference
+    const collectionRef = collection(db, 'businesses')
+
+    // Structure the data that is coming from firebase
+    const getStructuredData = (rawData) => rawData.map((doc) => ({
+        id: doc.id,
+        name: (
+            <>
+                <CAvatar size="md" src={doc.data().pictureURL} status={'success'} />
+                <span style={{ marginLeft: 7 }}> {`${doc.data().firstname} ${doc.data().lastname}`} </span>
+            </>
+        ),
+        phone: doc.data().phone,
+        location: doc.data().location || doc.data().placeOfResidence,
+        gender: doc.data().gender.toString().toUpperCase(),
+        status: (<Switch defaultChecked={doc.data().enabled} color="success" />),
+        actions: (
+            <>
+            <CButtonGroup>
+              <CButton onClick={() => history.push(`/supervisors/${doc.id}`)} color="primary"><Visibility /></CButton>
+              <CButton color="warning"><Edit /></CButton>
+              <CButton color="danger"><DeleteForever /></CButton>
+            </CButtonGroup>
+          </>
+        )
+    }));
+
+    useEffect(() => {
+        onSnapshot(collectionRef, (snapshot) => {
+            console.log(snapshot.docs.map((doc)=>({...doc.data()})));
+            // let _data = getStructuredData(snapshot.docs);
+            console.log(snapshot.docs.map((doc)=>({...doc.data()})));
+        });
+    }, [])
+
 
     const columns = [
         {
             name: "Name",
-            grow:2,
+            grow: 2,
             selector: (row) => row.name,
             sortable: true
         },
         {
             name: "Location",
-            grow:2,
+            grow: 2,
             selector: (row) => row.location,
             sortable: true,
             // center: true,
         },
         {
             name: "Status",
-            grow:1,
+            grow: 1,
             selector: (row) => row.status,
             sortable: true,
             // center: true,
         },
         {
             name: "Approved",
-            grow:1,
+            grow: 1,
             selector: (row) => row.approve,
             sortable: true,
             // center: true,
@@ -59,7 +104,7 @@ const Vendors = () => {
         //     button: true,
         // },
         {
-            cell: () =>  <CButton >Action</CButton>,
+            cell: () => <CButton >Action</CButton>,
             ignoreRowClick: true,
             allowOverflow: true,
             button: true,
