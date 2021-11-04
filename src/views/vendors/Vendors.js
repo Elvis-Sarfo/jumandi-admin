@@ -9,9 +9,6 @@ import { Icon, Switch } from '@mui/material';
 import { DeleteForever, Visibility, Edit } from '@mui/icons-material';
 import ReactCountryFlag from "react-country-flag"
 
-
-import CIcon from '@coreui/icons-react'
-import { cilBell, cilEnvelopeOpen, cilList, cilMenu, cibEx } from '@coreui/icons'
 import {
     CAvatar,
     CButton,
@@ -105,7 +102,7 @@ const Vendors = () => {
             setTotalVendors(totalVendors);
             setVendors(_data);
         });
-    }, [])
+    }, []);
 
 
     const columns = [
