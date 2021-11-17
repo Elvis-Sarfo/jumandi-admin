@@ -50,17 +50,19 @@ const Sales = () => {
         // The first array (saleIndexes) stores the vendors IDs in order
         let saleIndexes = [];
         // The second array (_sales) store the data that maps to the id
-        let  _sales = [];
+        let _sales = [];
 
         // Loop over the data that is coming from the database
         rawData.forEach((doc) => {
             // Get the vendor's in a variable and save it in the variable
             let vendorId = doc.data().station?.businessId;
+            let index = saleIndexes.indexOf(vendorId);
+
 
             // Calculate the summary data for te sales
             pendingSales.value += doc.data().businessStatus?.toLowerCase() == 'pending' ? 1 : 0;
             approvedSales.value += doc.data().businessStatus?.toLowerCase() == 'approved' ? 1 : 0;
-            
+
             // First check if the order has been completed before
             // IF: the order has been complete then it means it is a sale and we can work on that
             if (doc.data().orderState?.status.toLowerCase() == 'completed') {
@@ -69,9 +71,18 @@ const Sales = () => {
                 // Just update the data by incrementing numberOfOrders, netTotal, and grandTotal
                 // ELSE: add a new data to the MAP[saleIndexes, _sales] with initial values
                 if (saleIndexes.includes(vendorId)) {
-                    _sales[saleIndexes.indexOf(vendorId)].numOfOrders += 1;
-                    _sales[saleIndexes.indexOf(vendorId)].netTotal += doc.data().orderPrice;
-                    _sales[saleIndexes.indexOf(vendorId)].grandTotal += doc.data().orderPrice;
+                    _sales[index].numOfOrders += 1;
+                    _sales[index].netTotal +=
+                        Number((doc.data().orderPrice - (doc.data().orderPrice * 0.2)).toFixed(2));
+                    _sales[index].grandTotal += Number((doc.data().orderPrice).toFixed(2));
+                    _sales[index].revenue += Number((doc.data().orderPrice * 0.2).toFixed(2));
+
+                    _sales[index].netTotal = Number(_sales[index].netTotal.toFixed(2));
+                    _sales[index].grandTotal = Number(_sales[index].grandTotal.toFixed(2));
+                    _sales[index].revenue = Number(_sales[index].revenue.toFixed(2));
+                    // parseFloat(_sales[index].netTotal).toFixed(2);
+                    // parseFloat(_sales[index].grandTotal).toFixed(2);
+                    // parseFloat(_sales[index].revenue).toFixed(2);
                 } else {
                     saleIndexes.push(vendorId);
                     _sales.push({
@@ -95,8 +106,9 @@ const Sales = () => {
                             </div>
                         </div>),
                         numOfOrders: 1,
-                        netTotal: doc.data().orderPrice,
-                        grandTotal: doc.data().orderPrice,
+                        netTotal: Number((doc.data().orderPrice - (doc.data().orderPrice * 0.2)).toFixed(2)),
+                        grandTotal: Number((doc.data().orderPrice).toFixed(2)),
+                        revenue: Number((doc.data().orderPrice * 0.2).toFixed(2))
                     })
                 }
             }
@@ -141,6 +153,13 @@ const Sales = () => {
             center: true
         },
         {
+            name: "Grand Total",
+            selector: (row) => row.grandTotal,
+            sortable: true,
+            right: true,
+            grow: 2,
+        },
+        {
             name: "Net Total",
             selector: (row) => row.netTotal,
             sortable: true,
@@ -148,12 +167,13 @@ const Sales = () => {
             grow: 2,
         },
         {
-            name: "Grand Total",
-            selector: (row) => row.grandTotal,
+            name: "Revenue",
+            selector: (row) => row.revenue,
             sortable: true,
             right: true,
             grow: 2,
         }
+
     ];
 
     return (
@@ -166,7 +186,7 @@ const Sales = () => {
                         progress={{ color: 'success', value: 100 }}
                         text="All Approved Sales"
                         title="STATUS"
-                        value="Approved"
+                        value="Completed"
                     />
                 </CCol>
                 <CCol sm={6} lg={3}>

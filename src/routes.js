@@ -11,6 +11,7 @@ const GlobalPrice = React.lazy(() => import('./views/settings/GlobalPrice'))
 const Payments = React.lazy(() => import('./views/payments/Payments'))
 
 const Orders = React.lazy(() => import('./views/orders/Orders'))
+const OrderDetails = React.lazy(() => import('./views/orders/OrderDatails'))
 
 const Sales = React.lazy(() => import('./views/sales/Sales'))
 
@@ -36,7 +37,7 @@ const routes = [
 
 
   { path: '/orders', name: 'Orders', component: Orders, exact: true  },
-  { path: '/orders/:id', name: 'Order Details', component: Orders, exact: true },
+  { path: '/orders/:id', name: 'Order Details', component: OrderDetails, exact: true },
 
 
   { path: '/sales', name: 'Sales', component: Sales, exact: true  },

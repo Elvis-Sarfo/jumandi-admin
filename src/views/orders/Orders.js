@@ -102,7 +102,15 @@ const Orders = () => {
             time: moment.unix(doc.data().createdAt).format("Do MMM YYYY @ h:m a"),
             quantity: `${doc.data().orderQuantity}kg`,
             paymentMethod: doc.data().paymentMethod,
-            action: 'View on Map or something like that',
+            action:  (
+                <>
+                    <CButtonGroup>
+                        <CButton onClick={() => history.push(`/orders/${doc.id}`)} color="primary"><Visibility /></CButton>
+                        <CButton color="warning"><Edit /></CButton>
+                        <CButton color="danger"><DeleteForever /></CButton>
+                    </CButtonGroup>
+                </>
+            ),
         };
     });
 
@@ -161,18 +169,19 @@ const Orders = () => {
             grow: 1,
             sortable: true,
         },
-        // {
-        //     name: "Actions",
-        //     selector: (row) => row.action,
-        //     sortable: true,
-        //     center: true
-        // }
         {
-            cell: () => <CButton >Action</CButton>,
-            ignoreRowClick: true,
+            name: "Actions",
+            selector: (row) => row.action,
+            center: true,
             allowOverflow: true,
-            button: true,
-        },
+            grow: 2
+        }
+        // {
+        //     cell: () => <CButton >Action</CButton>,
+        //     ignoreRowClick: true,
+        //     allowOverflow: true,
+        //     button: true,
+        // },
     ];
 
     return (
