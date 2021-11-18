@@ -21,6 +21,7 @@ import { logo } from './../assets/brand/logo'
 const AppHeader = () => {
   const dispatch = useDispatch()
   const sidebarShow = useSelector((state) => state.sidebarShow)
+  const topNavTitile = useSelector((state) => state.topNavTitile)
 
   return (
     <CHeader position="sticky" className="mb-4 p-bg-color">
@@ -36,8 +37,8 @@ const AppHeader = () => {
         </CHeaderBrand>
         <CHeaderNav className="d-none d-md-flex me-auto">
           <CNavItem>
-            <CNavLink to="/dashboard" component={NavLink} activeClassName="active">
-              <h4 style={{margin: 0}} >Dashboard</h4>
+            <CNavLink activeClassName="active">
+              <h4 style={{margin: 0}} >{topNavTitile}</h4>
             </CNavLink>
           </CNavItem>
         </CHeaderNav>

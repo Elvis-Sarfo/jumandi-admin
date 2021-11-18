@@ -58,7 +58,7 @@ const _nav = [
     items: [
       {
         component: CNavItem,
-        name: 'General',
+        name: 'General Settings',
         to: '/settings/all',
       },
       {
@@ -76,7 +76,7 @@ const _nav = [
     items: [
       {
         component: CNavItem,
-        name: 'List Admins',
+        name: 'National Admins',
         to: '/national-admins/all',
       },
       {

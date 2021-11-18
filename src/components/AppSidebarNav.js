@@ -1,11 +1,15 @@
 import React from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 import { NavLink, useLocation } from 'react-router-dom'
 import PropTypes from 'prop-types'
 
 import { CBadge } from '@coreui/react'
 
 export const AppSidebarNav = ({ items }) => {
+  const dispatch = useDispatch()
+  const topNavTitile = useSelector((state) => state.topNavTitile)
   const location = useLocation()
+
   const navLink = (name, icon, badge) => {
     return (
       <>
@@ -30,6 +34,9 @@ export const AppSidebarNav = ({ items }) => {
             component: NavLink,
             activeClassName: 'active',
           })}
+        onClick={(e)=>{
+          dispatch({ type: 'set', topNavTitile: name });
+        }}
         key={index}
         {...rest}
       >
