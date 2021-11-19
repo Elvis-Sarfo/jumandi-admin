@@ -37,7 +37,7 @@ const AppHeader = () => {
         </CHeaderBrand>
         <CHeaderNav className="d-none d-md-flex me-auto">
           <CNavItem>
-            <CNavLink activeClassName="active">
+            <CNavLink >
               <h4 style={{margin: 0}} >{topNavTitile}</h4>
             </CNavLink>
           </CNavItem>

@@ -1,8 +1,9 @@
 import { createStore } from 'redux'
-
+import React from 'react'
 const initialState = {
   sidebarShow: true,
-  topNavTitile: ''
+  topNavTitile: '',
+  toast:(<></>)
 }
 
 const changeState = (state = initialState, { type, ...rest }) => {
