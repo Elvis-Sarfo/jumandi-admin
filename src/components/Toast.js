@@ -6,7 +6,7 @@ import {
   CToast,
 } from '@coreui/react'
 
-const Toast = ({autohide = true, visible = true, message, title}) => {
+const Toast = ({autohide = true, visible = true, message, title, color}) => {
   return (
     <div>
       <CToast title="CoreUI for React.js" color="light" autohide={autohide} visible={visible}>
@@ -20,7 +20,7 @@ const Toast = ({autohide = true, visible = true, message, title}) => {
             focusable="false"
             role="img"
           >
-            <rect width="100%" height="100%" fill="#f9b115"></rect>
+            <rect width="100%" height="100%" fill={color}></rect>
           </svg>
           <strong className="me-auto">{title}</strong>
           {/* <small>7 min ago</small> */}
@@ -33,7 +33,7 @@ const Toast = ({autohide = true, visible = true, message, title}) => {
 
 
 Toast.defaultProps = {
-  color: 'steelblue',
+  color: '#f9b115',
   autohide: true,
   visible: true,
   title: ''
@@ -43,7 +43,8 @@ Toast.propTypes = {
   autohide: PropTypes.bool,
   visible: PropTypes.bool,
   message: PropTypes.string.isRequired,
-  title: PropTypes.string
+  title: PropTypes.string,
+  color: PropTypes.string
 }
 
 export default Toast

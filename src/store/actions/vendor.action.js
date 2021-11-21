@@ -1,6 +1,6 @@
 import React from 'react'
-import { collection, addDoc, getDoc, serverTimestamp, doc, getDocs, onSnapshot } from '@firebase/firestore';
-
+import { collection, addDoc, getDoc, serverTimestamp, doc, getDocs, onSnapshot, updateDoc } from '@firebase/firestore';
+import Toast from './../../components/Toast';
 
 // Get firebase Firestore reference
 // const collectionRef = collection(db, 'businesses');
@@ -16,10 +16,13 @@ export const getVendors = () => {
   };
 }
 
-// export const createVendor = (nationalAdmin) => {
-//   return (dispatch, getState, { firestore, storage }) => {
-//     // make async call to database
-//     dispatch({ type: 'CREATE_VENDOR', nationalAdmin });
-//   }
-// }
+export const updateVendorStatus = (approvalStatus, vendorId) => {
+  return async (dispatch, getState, { firestore }) => {
+    const docRef = doc(firestore, "businesses", vendorId);
+    await updateDoc(docRef, {
+      businessStatus: approvalStatus
+    });
+    dispatch({ type: 'UPDATE_UI', toast: (<Toast color='green' title='Task Complete' message='Vendor Status has been updated' />) });
+  }
+}
 

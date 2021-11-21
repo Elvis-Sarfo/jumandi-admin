@@ -12,7 +12,7 @@ const initialState = {
     totalVendors: 0
   },
   data: [],
-  filter: ['This is a fitler']
+  filter: ['This is a fitler'],
 }
 
 

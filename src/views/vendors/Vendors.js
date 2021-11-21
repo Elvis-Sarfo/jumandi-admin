@@ -2,7 +2,7 @@ import React, { lazy, useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import CustomDataTable from "./../../components/CustomDataTable";
-import { getVendors } from '../../store/actions/vendor.action'
+import { updateVendorStatus } from '../../store/actions/vendor.action'
 
 
 import { firestore as db } from './../../config/firebase'
@@ -29,30 +29,15 @@ import {
 const Vendors = () => {
 
     const history = useHistory();
+    const dispatch = useDispatch();
 
     // Create the states of the component
-    const topNavTitile = useSelector((state) => state.ui.topNavTitile);
 
-    const vendors = useSelector((state) => getStructuredData(state.vendors.data) );
+    const vendors = useSelector((state) => getStructuredData(state.vendors.data));
     const totalVendors = useSelector((state) => state.vendors.summary.totalVendors);
     const pendingVendors = useSelector((state) => state.vendors.summary.pendingVendors);
     const approvedVendors = useSelector((state) => state.vendors.summary.approvedVendors);
     const filter = useSelector((state) => state.vendors.filter);
-
-    console.log(filter,totalVendors);
-    // const [_vendors, setVendors] = useState([]);
-    // let [totalVendors, setTotalVendors] = useState(0);
-    // let [pendingVendors, setPendingVendors] = useState({
-    //     percentage: 0,
-    //     value: 0
-    // });
-    // let [approvedVendors, setApprovedVendors] = useState({
-    //     percentage: 0,
-    //     value: 0
-    // });
-
-    // // Get firebase Firestore reference
-    // const collectionRef = collection(db, 'businesses');
 
     // Structure the data that is coming from firebase
     function getStructuredData(rawData) {
@@ -86,12 +71,23 @@ const Vendors = () => {
                     </div>
                 </div>),
                 status: vendor.businessStatus,
-                approve: (<Switch defaultChecked={vendor.businessStatus?.toLowerCase() == 'approved'} color="success" />),
+                approve: (
+                    <Switch
+                        onChange= {(e) => {
+                            e.preventDefault();
+                            const status = vendor.businessStatus?.toLowerCase() == 'approved' ? 'pending' : 'approved';
+                            dispatch(updateVendorStatus(status, vendor.id));
+                        }}
+                        checked={vendor?.businessStatus?.toLowerCase()
+                             == 'approved'}
+                        color="success"
+                    />
+                ),
                 actions: (
                     <>
                         <CButtonGroup>
-                            <CButton onClick={() => history.push(`/supervisors/${doc.id}`)} color="primary"><Visibility /></CButton>
-                            <CButton color="warning"><Edit /></CButton>
+                            <CButton onClick={() => history.push(`/supervisors/${vendor.id}`)} color="primary"><Visibility /></CButton>
+                            {/* <CButton color="warning"><Edit/></CButton> */}
                             <CButton color="danger"><DeleteForever /></CButton>
                         </CButtonGroup>
                     </>
@@ -99,11 +95,6 @@ const Vendors = () => {
             };
         });
     }
-
-    // const vendors = getStructuredData(state.data);
-    // const totalVendors = state.summary.totalVendors;
-    // const pendingVendors = state.summary.pendingVendors;
-    // const approvedVendors = state.summary.approvedVendors;
 
     // useEffect(() => {
     //     dispatch(getVendors());
@@ -139,34 +130,29 @@ const Vendors = () => {
             sortable: true,
             // center: true,
         },
+        {
+            name: 'Actions',
+            ignoreRowClick: true,
+            selector: (row) => row.actions,
+            allowOverflow: true,
+            grow: 1,
+            center: true,
+        },
         // {
-        //     cell: () =>  <CButton >Action</CButton>,
-        //     name: 'Status',
+        //     cell: () => <CButton >Action</CButton>,
         //     ignoreRowClick: true,
         //     allowOverflow: true,
         //     button: true,
         // },
-        {
-            cell: () => <CButton >Action</CButton>,
-            ignoreRowClick: true,
-            allowOverflow: true,
-            button: true,
-        },
     ];
 
     return (
         <>
-            {/* <CRow>
-                <CCol>
-                    <CButton onClick={() => history.push('/vendors/create')} color="warning">Add New Vendor</CButton>
-                </CCol>
-            </CRow>
-            <br /> */}
             <CRow>
                 <CCol xs={4}>
                     <CWidgetStatsB
                         className="mb-3"
-                        progress={{ color: 'warning', value: 40 }}
+                        progress={{ color: 'warning', value:parseFloat(pendingVendors?.percentage)}}
                         text={`${pendingVendors?.percentage}% vendors Pending`}
                         title="New Requests"
                         value={<b>{pendingVendors?.value}</b>}
@@ -175,7 +161,7 @@ const Vendors = () => {
                 <CCol xs={4}>
                     <CWidgetStatsB
                         className="mb-3"
-                        progress={{ color: 'success', value: 60 }}
+                        progress={{ color: 'success', value: parseFloat(approvedVendors?.percentage)}}
                         text={`${approvedVendors?.percentage}% vendors Approved`}
                         title="Approved Vendors"
                         value={<b>{approvedVendors?.value}</b>}
