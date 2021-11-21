@@ -1,5 +1,7 @@
-import React from 'react'
+import React ,{useEffect} from 'react';
 import GoogleMapReact from 'google-map-react';
+import { useDispatch, useSelector } from 'react-redux';
+import { createNationalAdmin, getNationalAdmins } from '../../store/actions/nationalAdmin.action'
 import {
     CForm,
     CButton,
@@ -12,16 +14,26 @@ import {
     CCard,
     CCardBody,
     CCol
-} from '@coreui/react'
+} from '@coreui/react';
 
 const AnyReactComponent = ({ text }) => <div>{text}</div>;
 
-const CreateAdmin = () => {
+const CreateAdmin = ( {id, ...props}) => {
+    const dispatch = useDispatch();
+    const nationalAdmins = useSelector((state) => state.nationalAdmins)
+
+
     const center = {
         lat: 59.95,
         lng: 30.33
     };
     const zoom = 11;
+
+    useEffect(() => {
+        dispatch(getNationalAdmins());
+        return 0;
+    }, [])
+
     return (
         <CCard>
             <CCardBody>
@@ -120,5 +132,20 @@ const CreateAdmin = () => {
         </CCard>
     )
 }
+
+// const mapStateToProps = (state) => {
+//     return {
+//         nationalAdmin: state.nationalAdmins
+//     }
+// }
+
+// const mapDispatchToProps = dispatch => {
+//     return {
+//         createNationalAdmin: (nationalAdmin) => dispatch(createNationalAdmin(nationalAdmin)),
+//         getNationalAdmins: () => dispatch(getNationalAdmins())
+//     }
+// }
+
+// export default connect(mapStateToProps, mapDispatchToProps)(CreateAdmin)
 
 export default CreateAdmin

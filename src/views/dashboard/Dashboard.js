@@ -54,8 +54,8 @@ import avatar4 from './../../assets/images/avatars/4.jpg'
 import avatar5 from './../../assets/images/avatars/5.jpg'
 import avatar6 from './../../assets/images/avatars/6.jpg'
 
-const WidgetsDropdown = lazy(() => import('../widgets/WidgetsDropdown.js'))
-const WidgetsBrand = lazy(() => import('../widgets/WidgetsBrand.js'))
+// const WidgetsDropdown = lazy(() => import('../widgets/WidgetsDropdown.js'))
+// const WidgetsBrand = lazy(() => import('../widgets/WidgetsBrand.js'))
 
 const Dashboard = () => {
   const random = (min, max) => {
@@ -185,7 +185,7 @@ const Dashboard = () => {
 
   return (
     <>
-      <WidgetsDropdown />
+      {/* <WidgetsDropdown /> */}
       {/*
       <CCard className="mb-4">
         <CCardBody>

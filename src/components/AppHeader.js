@@ -20,8 +20,8 @@ import { logo } from './../assets/brand/logo'
 
 const AppHeader = () => {
   const dispatch = useDispatch()
-  const sidebarShow = useSelector((state) => state.sidebarShow)
-  const topNavTitile = useSelector((state) => state.topNavTitile)
+  const sidebarShow = useSelector((state) => state.ui.sidebarShow)
+  const topNavTitile = useSelector((state) => state.ui.topNavTitile)
 
   return (
     <CHeader position="sticky" className="mb-4 p-bg-color">
