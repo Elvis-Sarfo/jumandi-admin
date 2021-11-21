@@ -2,7 +2,7 @@ import React, { lazy, useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import CustomDataTable from "./../../components/CustomDataTable";
-import { updateVendorStatus } from '../../store/actions/vendor.action'
+import { updateVendorStatus } from '../../store/actions/vendors.action'
 
 
 import { firestore as db } from './../../config/firebase'
@@ -34,17 +34,15 @@ const Vendors = () => {
     // Create the states of the component
 
     const vendors = useSelector((state) => getStructuredData(state.vendors.data));
-    const totalVendors = useSelector((state) => state.vendors.summary.totalVendors);
-    const pendingVendors = useSelector((state) => state.vendors.summary.pendingVendors);
-    const approvedVendors = useSelector((state) => state.vendors.summary.approvedVendors);
-    const filter = useSelector((state) => state.vendors.filter);
+    const dataSummary = useSelector((state) => state.vendors.summary);
+
+    const totalVendors = dataSummary?.totalVendors;
+    const pendingVendors = dataSummary?.pendingVendors;
+    const approvedVendors = dataSummary?.approvedVendors;
 
     // Structure the data that is coming from firebase
     function getStructuredData(rawData) {
         return rawData.map((vendor) => {
-            // pendingVendors.value += doc.data().businessStatus?.toLowerCase() == 'pending' ? 1 : 0;
-            // approvedVendors.value += doc.data().businessStatus?.toLowerCase() == 'approved' ? 1 : 0;
-
             return {
                 id: vendor.id,
                 name: (<>
@@ -96,12 +94,6 @@ const Vendors = () => {
         });
     }
 
-    // useEffect(() => {
-    //     dispatch(getVendors());
-    //     return 0;
-    // },[]);
-
-
     const columns = [
         {
             name: "Name",
@@ -138,12 +130,6 @@ const Vendors = () => {
             grow: 1,
             center: true,
         },
-        // {
-        //     cell: () => <CButton >Action</CButton>,
-        //     ignoreRowClick: true,
-        //     allowOverflow: true,
-        //     button: true,
-        // },
     ];
 
     return (

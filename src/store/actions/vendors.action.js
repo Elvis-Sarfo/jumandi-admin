@@ -1,6 +1,6 @@
 import React from 'react'
 import { collection, addDoc, getDoc, serverTimestamp, doc, getDocs, onSnapshot, updateDoc } from '@firebase/firestore';
-import Toast from './../../components/Toast';
+import Toast from '../../components/Toast';
 
 // Get firebase Firestore reference
 // const collectionRef = collection(db, 'businesses');

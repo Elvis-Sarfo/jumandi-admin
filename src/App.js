@@ -4,7 +4,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import 'bootstrap/dist/css/bootstrap.css';
 import './scss/style.scss'
-import { getVendors } from './store/actions/vendor.action'
+import { getVendors } from './store/actions/vendors.action'
+import { getUsers } from './store/actions/users.action'
 
 
 const loading = (
@@ -31,6 +32,7 @@ const App = () => {
 
   useEffect(() => {
     dispatch(getVendors());
+    dispatch(getUsers());
     return 0;
   }, []);
 
