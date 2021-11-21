@@ -1,9 +1,10 @@
-import React, {useRef } from 'react'
+import React, { useRef, useEffect } from 'react'
 import { CToaster } from '@coreui/react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import 'bootstrap/dist/css/bootstrap.css';
 import './scss/style.scss'
+import { getVendors } from './store/actions/vendor.action'
 
 
 const loading = (
@@ -23,10 +24,20 @@ const Page500 = React.lazy(() => import('./views/pages/page500/Page500'))
 
 const App = () => {
   const toaster = useRef();
-  const toast = useSelector((state) => state.toast)
+  // Create the states of the component
+  const dispatch = useDispatch();
+  // const state = useSelector((state) => state.vendors);
+  const toast = useSelector((state) => state.ui.toast);
+
+  useEffect(() => {
+    dispatch(getVendors());
+    return 0;
+  }, []);
+
+  
   return (
     <>
-    <CToaster ref={toaster} push={toast} placement="top-end" />
+      <CToaster ref={toaster} push={toast} placement="top-end" />
       <BrowserRouter>
         <React.Suspense fallback={loading}>
           <Switch>
