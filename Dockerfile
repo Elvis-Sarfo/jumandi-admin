@@ -22,7 +22,7 @@
 
 
 FROM node:16-alpine AS builder
-ENV NODE_ENV production
+ENV NODE_ENV development
 WORKDIR /app
 COPY package.json .
 COPY package-lock.json .
@@ -31,8 +31,8 @@ COPY . .
 RUN npm run build
 
 # Bundle static assets with nginx
-FROM nginx:1.20.2 as production
-ENV NODE_ENV production
+FROM nginx:1.20.2 as development
+ENV NODE_ENV development
 # Copy built assets from builder
 COPY --from=builder /app/build /usr/share/nginx/html
 # Add your nginx.conf

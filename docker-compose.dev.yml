@@ -6,5 +6,5 @@ services:
     image: jumandi-admin-dev
     build:
       context: .
-      target: dev
+      target: development
     stdin_open: true
