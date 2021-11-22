@@ -10,7 +10,6 @@ export const getVendors = () => {
     const collectionRef = collection(firestore, 'businesses');
     onSnapshot(collectionRef, (snapshot) => {
       let vendors = snapshot.docs;
-      console.log(snapshot.docs.map(doc => ( {id: doc.id, ...doc.data() })));
       dispatch({ type: 'GET_VENDORS', vendors })
     });
   };

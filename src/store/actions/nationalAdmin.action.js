@@ -1,79 +1,64 @@
 import React from 'react'
-import { collection, addDoc, getDoc, serverTimestamp, doc, getDocs, onSnapshot } from '@firebase/firestore';
+import { collection, setDoc, getDoc, serverTimestamp, doc, updateDoc, onSnapshot } from '@firebase/firestore';
 import { ref, uploadString, getDownloadURL, uploadBytesResumable, uploadBytes } from 'firebase/storage';
-import { Icon, Switch } from '@mui/material';
-import { DeleteForever, Visibility, Edit } from '@mui/icons-material';
-import ReactCountryFlag from "react-country-flag"
-
+import Toast from '../../components/Toast';
 import {
   CAvatar,
   CButton,
   CButtonGroup,
 } from '@coreui/react'
 
+const collectionName = 'national_admin';
+
 // Get firebase Firestore reference
 // const collectionRef = collection(db, 'businesses');
 
 export const getNationalAdmins = () => {
   return (dispatch, getState, { firestore }) => {
-    const collectionRef = collection(firestore, 'businesses');
+    const collectionRef = collection(firestore, collectionName);
     onSnapshot(collectionRef, (snapshot) => {
-      let admins = snapshot.docs.map((doc) => ({ ...doc.data() }));
-      console.log(admins);
-      dispatch({ type: 'GET_NATIONAL_ADMIN', admins })
+      let nationalAdmins = snapshot.docs;
+      dispatch({ type: 'GET_NATIONAL_ADMINS', nationalAdmins })
     });
   };
 }
 
-export const createNationalAdmin = (nationalAdmin) => {
-  return (dispatch, getState, { firestore, storage }) => {
-    // make async call to database
-    dispatch({ type: 'CREATE_NATIONAL_ADMIN', nationalAdmin });
+export const updateNationalAdminStatus = (approvalStatus, id) => {
+  return async (dispatch, getState, { firestore }) => {
+    const docRef = doc(firestore, collectionName, id);
+    await updateDoc(docRef, {
+      enabled: approvalStatus
+    });
+    dispatch({
+      type: 'UPDATE_UI',
+      toast: (
+        <Toast color='green'
+          title='Task Complete'
+          message='National Admin Status has been updated' />
+      )
+    });
   }
 }
 
-  //   // Structure the data that is coming from firebase
-  //   const getStructuredData = (rawData) => rawData.map((doc) => {
-
-  //     pendingVendors.value += doc.data().businessStatus?.toLowerCase() == 'pending' ? 1 : 0;
-  //     approvedVendors.value += doc.data().businessStatus?.toLowerCase() == 'approved' ? 1 : 0;
-
-  //     return {
-  //         id: doc.id,
-  //         name: (<>
-  //             <CAvatar size="md" src={doc.data().businessLogo} status={'success'} />
-  //             <span style={{ marginLeft: 7 }}>{doc.data().businessName}</span>
-  //         </>
-  //         ),
-  //         location: (<div className="p-1">
-  //             <div>
-  //                 <ReactCountryFlag
-  //                     className="emojiFlag"
-  //                     countryCode={doc.data().businessLocation?.isoCode}
-  //                     style={{
-  //                         fontSize: '1em',
-  //                         lineHeight: '1em',
-  //                     }}
-  //                     aria-label="United States"
-  //                 />{' '}
-  //                 {doc.data().businessLocation?.country}
-  //             </div>
-  //             <div className="small text-medium-emphasis">
-  //                 <span>{doc.data().businessLocation?.adminArea}</span><br />
-  //                 <span>{doc.data().businessLocation?.locality}</span> ,
-  //                 <span>{doc.data().businessLocation?.name}</span>
-  //             </div>
-  //         </div>),
-  //         status: doc.data().businessStatus,
-  //         approve: (<Switch defaultChecked={doc.data().businessStatus?.toLowerCase() == 'approved'} color="success" />),
-  //         actions: (
-  //             <>
-  //                 <CButtonGroup>
-  //                     <CButton onClick={() => history.push(`/supervisors/${doc.id}`)} color="primary"><Visibility /></CButton>
-  //                     <CButton color="warning"><Edit /></CButton>
-  //                     <CButton color="danger"><DeleteForever /></CButton>
-  //                 </CButtonGroup>
-  //             </>
-  //         )
-  //     };
-  // });
+/**
+ * Create a new National Admin
+ * @param  {Object} data
+ */
+export const createNationalAdmin = (data) => {
+  return async (dispatch, getState, { firestore, storage }) => {
+    try {
+      // get the collection schema
+      const schemaRef = doc(firestore, 'DATABASE_SCHEMA', collectionName);
+      const shema = await getDoc(schemaRef).data();
+      // create a doc ref for the new admin
+      const docRef = doc(firestore, collectionName, ++shema.counter);
+      // add the data
+      const nationalAdmin = await setDoc(docRef, data);
+      // dispatch data
+      dispatch({ type: 'CREATE_NATIONAL_ADMIN', nationalAdmin });
+    } catch (error) {
+      console.log(error);
+      // dispatch({ type: 'UPDATE_NATIONAL_ADMIN', nationalAdmin });
+    }
+  }
+}
