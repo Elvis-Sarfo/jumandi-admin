@@ -8,6 +8,7 @@ import salesReducer from './sales.reducer';
 import paymentsReducer from './payments.reducer';
 import userReducer from './users.reducer';
 import nationalAdminsReducer from './nationalAdmins.reducer'
+import pricesReducer from './prices.reducer'
 
 import { combineReducers } from "redux";
 
@@ -21,7 +22,8 @@ const reducers = combineReducers({
   salesReducer: salesReducer,
   payments: paymentsReducer,
   users: userReducer,
-  nationalAdmins: nationalAdminsReducer
+  nationalAdmins: nationalAdminsReducer,
+  prices:pricesReducer
 });
 
 export default reducers

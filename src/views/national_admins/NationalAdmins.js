@@ -5,7 +5,7 @@ import CustomDataTable from "./../../components/CustomDataTable";
 import { Icon, Switch } from '@mui/material';
 import { DeleteForever, Visibility, Edit } from '@mui/icons-material';
 import ReactCountryFlag from "react-country-flag";
-import { updateNationalAdminStatus } from '../../store/actions/nationalAdmin.action';
+import { updateNationalAdminStatus } from '../../store/actions/nationalAdmins.action';
 
 import {
     CAvatar,

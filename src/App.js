@@ -6,7 +6,8 @@ import 'bootstrap/dist/css/bootstrap.css';
 import './scss/style.scss'
 import { getVendors } from './store/actions/vendors.action'
 import { getUsers } from './store/actions/users.action'
-import { getNationalAdmins } from './store/actions/nationalAdmin.action'
+import { getNationalAdmins } from './store/actions/nationalAdmins.action'
+import { getPrices } from './store/actions/prices.action'
 
 
 const loading = (
@@ -35,6 +36,7 @@ const App = () => {
     dispatch(getVendors());
     dispatch(getUsers());
     dispatch(getNationalAdmins());
+    dispatch(getPrices());
     return 0;
   }, []);
 
