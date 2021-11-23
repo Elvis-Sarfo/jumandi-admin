@@ -89,17 +89,22 @@ const getStructuredData = ({ orders }) => {
   orders.forEach(doc => {
     // get the data from the document
     const order = doc.data();
+    const orderState = order.orderState?.status.toLowerCase();
+    if (orderState != 'deleted') {
 
-    pendingOrders.value += order.orderState?.status.toLowerCase() == 'pending' ? 1 : 0;
-    completedOrders.value += order.orderState?.status.toLowerCase() == 'completed' ? 1 : 0;
-    newOrders.value += order.orderState?.status.toLowerCase() == 'new' ? 1 : 0;
-    rejectedOrders.value += order.orderState?.status.toLowerCase() == 'rejected' ? 1 : 0;
-    acceptedOrders.value += order.orderState?.status.toLowerCase() == 'accepted' ? 1 : 0;
-    cancelledOrders.value += order.orderState?.status.toLowerCase() == 'cancelled' ? 1 : 0;
+    pendingOrders.value += orderState == 'pending' ? 1 : 0;
+    completedOrders.value += orderState == 'completed' ? 1 : 0;
+    newOrders.value += orderState == 'new' ? 1 : 0;
+    rejectedOrders.value += orderState == 'rejected' ? 1 : 0;
+    acceptedOrders.value += orderState == 'accepted' ? 1 : 0;
+    cancelledOrders.value += orderState == 'cancelled' ? 1 : 0;
 
     // Pushed structured data into the data map
-    data[order.orderId] = { id: doc.id, ...order };
-    filteredData.push({ id: doc.id, ...order });
+
+      data[order.orderId] = { id: doc.id, ...order };
+      filteredData.push({ id: doc.id, ...order });
+    }
+
   });
 
   // get the percentage of the order summaries

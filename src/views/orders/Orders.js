@@ -1,11 +1,11 @@
 import React, { lazy, useState, useEffect } from 'react'
-import data from "./test";
-import { useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
-import CustomDataTable from "./../../components/CustomDataTable";
+import { deleteOrder } from '../../store/actions/orders.action';
+import CustomDataTable from "./../../components/CustomDataTable"
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
 
-import { firestore as db } from './../../config/firebase'
-import { collection, doc, getDocs, onSnapshot } from '@firebase/firestore';
 
 import { DeleteForever, Visibility, Edit } from '@mui/icons-material';
 import ReactCountryFlag from "react-country-flag"
@@ -20,8 +20,9 @@ import {
 } from '@coreui/react'
 
 const Orders = () => {
+    const MySwal = withReactContent(Swal)
     const history = useHistory();
-    // const dispatch = useDispatch();
+    const dispatch = useDispatch();
 
     const orders = useSelector((state) => getStructuredData(state.orders.data));
     const dataSummary = useSelector((state) => state.orders.summary);
@@ -36,9 +37,8 @@ const Orders = () => {
 
     // Structure the data
     function getStructuredData(data) {
-        // Object.keys(data).
-        return Object.keys(data).map((_order) => {
-            const order = data[_order];
+        return Object.keys(data).map((key) => {
+            const order = data[key];
             return {
                 id: order.orderId,
                 orderId: order.orderId,
@@ -89,9 +89,24 @@ const Orders = () => {
                 action: (
                     <>
                         <CButtonGroup>
-                            <CButton onClick={() => history.push(`/orders/${doc.id}`)} color="primary"><Visibility /></CButton>
-                            <CButton color="warning"><Edit /></CButton>
-                            <CButton color="danger"><DeleteForever /></CButton>
+                            <CButton onClick={() => history.push(`/orders/${order.id}`)} color="primary"><Visibility /></CButton>
+                            <CButton onClick={async (e) => {
+                                e.preventDefault();
+                                const alertResponse = await MySwal.fire({
+                                    title: 'Are you sure you?',
+                                    text: "You won't be able to revert this!",
+                                    icon: 'warning',
+                                    showCancelButton: true,
+                                    reverseButtons: true,
+                                    confirmButtonColor: '#d33',
+                                    cancelButtonColor: '#f9b115',
+                                    confirmButtonText: 'Yes, delete it!',
+                                    cancelButtonText: 'No, cancel',
+                                  })
+                                  if(alertResponse.isConfirmed){
+                                    dispatch(deleteOrder(order.id, order.orderId));
+                                  }
+                            }} color="danger"><DeleteForever /></CButton>
                         </CButtonGroup>
                     </>
                 ),

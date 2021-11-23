@@ -14,13 +14,17 @@ export const getOrders = () => {
   };
 }
 
-export const updateOrderStatus = (approvalStatus, orderId) => {
+export const deleteOrder = (id,orderId) => {
   return async (dispatch, getState, { firestore }) => {
-    const docRef = doc(firestore, collectionName, orderId);
+    const docRef = doc(firestore, collectionName, id);
     await updateDoc(docRef, {
-      enabled: approvalStatus
+      orderState: {
+        changeAt: Date.now(),
+        reason:['Deleted by the Admin'],
+        status: 'deleted'
+      }
     });
-    dispatch({ type: 'UPDATE_UI', toast: (<Toast color='green' title='Task Complete' message='Order Status has been updated' />) });
+    dispatch({ type: 'UPDATE_UI', toast: (<Toast color='green' title='Task Complete' message={`Order ${orderId} has been deleted`} />) });
   }
 }
 
