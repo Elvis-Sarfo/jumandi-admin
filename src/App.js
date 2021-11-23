@@ -2,12 +2,13 @@ import React, { useRef, useEffect } from 'react'
 import { CToaster } from '@coreui/react'
 import { useDispatch, useSelector } from 'react-redux'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
-import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap/dist/css/bootstrap.css'
 import './scss/style.scss'
 import { getVendors } from './store/actions/vendors.action'
 import { getUsers } from './store/actions/users.action'
 import { getNationalAdmins } from './store/actions/nationalAdmins.action'
 import { getPrices } from './store/actions/prices.action'
+import { getOrders } from './store/actions/orders.action'
 
 
 const loading = (
@@ -37,6 +38,7 @@ const App = () => {
     dispatch(getUsers());
     dispatch(getNationalAdmins());
     dispatch(getPrices());
+    dispatch(getOrders());
     return 0;
   }, []);
 
