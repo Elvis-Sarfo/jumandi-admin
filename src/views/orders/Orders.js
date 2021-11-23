@@ -23,7 +23,7 @@ const Orders = () => {
     const history = useHistory();
     // const dispatch = useDispatch();
 
-    const orders = useSelector((state) => getStructuredData(state.orders.filteredData));
+    const orders = useSelector((state) => getStructuredData(state.orders.data));
     const dataSummary = useSelector((state) => state.orders.summary);
 
     const pendingOrders = dataSummary?.pendingOrders;
@@ -34,35 +34,11 @@ const Orders = () => {
     const cancelledOrders = dataSummary?.cancelledOrders;
     const totalOrders = dataSummary?.totalOrders;
 
-
-
-
-    // Create the states of the component
-    // const [orders, setOrders] = useState([]);
-    // let [totalOrders, setTotalOrders] = useState(0);
-    // let [newOrders, setNewOrders] = useState({
-    //     percentage: 0,
-    //     value: 0
-    // });
-    // let [pendingOrders, setPendingOrders] = useState({
-    //     percentage: 0,
-    //     value: 0
-    // });
-    // let [completedOrders, setCompletedOrders] = useState({
-    //     percentage: 0,
-    //     value: 0
-    // });
-
-    // Get firebase Firestore reference
-    // const collectionRef = collection(db, 'orders');
-
-    // Structure the data that is coming from firebase
-    function getStructuredData(rawData) {
-        return rawData.map((order) => {
-            // pendingOrders.value += doc.data().orderState?.status.toLowerCase() == 'pending' ? 1 : 0;
-            // completedOrders.value += doc.data().orderState?.status.toLowerCase() == 'completed' ? 1 : 0;
-            // newOrders.value += doc.data().orderState?.status.toLowerCase() == 'new' ? 1 : 0;
-
+    // Structure the data
+    function getStructuredData(data) {
+        // Object.keys(data).
+        return Object.keys(data).map((_order) => {
+            const order = data[_order];
             return {
                 id: order.orderId,
                 orderId: order.orderId,
@@ -122,22 +98,6 @@ const Orders = () => {
             };
         });
     }
-
-    // useEffect(() => {
-    //     onSnapshot(collectionRef, (snapshot) => {
-    //         console.log(snapshot.docs.map((doc) => ({ ...doc.data() })));
-    //         let _data = getStructuredData(snapshot.docs);
-    //         totalOrders = snapshot.size;
-    //         pendingOrders.percentage = ((pendingOrders.value / totalOrders) * 100).toFixed(2);
-    //         completedOrders.percentage = ((completedOrders.value / totalOrders) * 100).toFixed(2);
-
-    //         setPendingOrders(pendingOrders);
-    //         setCompletedOrders(completedOrders);
-    //         setTotalOrders(totalOrders);
-    //         setNewOrders(newOrders);
-    //         setOrders(_data);
-    //     });
-    // }, []);
 
     const columns = [
         {
