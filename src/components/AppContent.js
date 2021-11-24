@@ -4,11 +4,22 @@ import { CContainer, CSpinner } from '@coreui/react'
 
 // routes config
 import routes from '../routes'
+import { height } from '@mui/system'
 
 const AppContent = () => {
   return (
-    <CContainer lg>
-      <Suspense fallback={<CSpinner color="primary" />}>
+    <div style={{ padding: 0, marginBottom: 20 }}>
+      <Suspense fallback={(
+        <div style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '50vh',
+        }}>
+          <CSpinner color="primary" />
+        </div>
+      )}>
+
         <Switch>
           {routes.map((route, idx) => {
             return (
@@ -30,7 +41,7 @@ const AppContent = () => {
           <Redirect from="/" to="/dashboard" />
         </Switch>
       </Suspense>
-    </CContainer>
+    </div>
   )
 }
 

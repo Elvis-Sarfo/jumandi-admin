@@ -1,99 +1,122 @@
-import React from 'react'
+import React, { useState } from 'react'
 import data from "./test";
 import { useHistory } from 'react-router-dom';
 import CustomDataTable from "./../../components/CustomDataTable";
-import CIcon from '@coreui/icons-react'
+import PropTypes from 'prop-types';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
 import { cilBell, cilEnvelopeOpen, cilList, cilMenu, cibEx } from '@coreui/icons'
+import WithdrawalRequests from './WithdrawalRequests';
+import PaymentsList from './PaymentsList';
+import { styled } from '@mui/material/styles';
 import {
-    CAvatar,
-    CButton,
-    CButtonGroup,
-    CCard,
-    CCardBody,
-    CCardFooter,
-    CCardHeader,
-    CCol,
-    CRow,
-    CWidgetStatsB,
+  CBadge,
+  CCard,
 } from '@coreui/react'
 
 const Payments = () => {
-    const history = useHistory();
 
-    const columns = [
-        {
-            name: "Title",
-            selector: (row) => row.title,
-            sortable: true
-        },
-        {
-            name: "Directior",
-            selector: (row) => row.director,
-            sortable: true
-        },
-        {
-            name: "Runtime (m)",
-            selector: (row) => row.runtime,
-            sortable: true,
-            right: true
-        }
-    ];
-    return (
-        <>
-            <CRow>
-                <CCol xs={4}>
-                    <CWidgetStatsB
-                        className="mb-3"
-                        progress={{ color: 'warning', value: 40 }}
-                        text="40% vendors pending approval"
-                        title="New Requests"
-                        value="20"
-                    />
-                </CCol>
-                <CCol xs={4}>
-                    <CWidgetStatsB
-                        className="mb-3"
-                        progress={{ color: 'success', value: 60 }}
-                        text="60% vendors approved"
-                        title="Approved Vendors"
-                        value="30"
-                    />
-                </CCol>
-                <CCol xs={4}>
-                    <CWidgetStatsB
-                        className="mb-3"
-                        progress={{ color: 'info', value: 100 }}
-                        text="Note: Excluding rejected"
-                        title="Total Vendors"
-                        value="50"
-                    />
-                </CCol>
-            </CRow>
-            <CustomDataTable
-                title="All Orders"
-                actions={[
-                    <CButton
-                        size="sm"
-                        shape="rounded-0"
-                        onClick={() => history.push('/national-admins/create')}
-                        color="warning"
-                    >
-                        Export
-                    </CButton>
-                ]
-                }
-                columns={columns}
-                data={data}
-                onChangePage={(page, totalRows) => {
-                    console.log(page, totalRows);
-                }}
-                onChangeRowsPerPage={(currentRowsPerPage) => {
-                    console.log('onChangeRowsPerPage running');
-                    console.log(currentRowsPerPage);
-                }}
+  const [value, setValue] = useState(0);
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+
+  const StyledTabs = styled((props) => (
+    <Tabs
+      {...props}
+      TabIndicatorProps={{ children: <span className="MuiTabs-indicatorSpan" /> }}
+    />
+  ))({
+    '& .MuiTabs-indicator': {
+      display: 'flex',
+      justifyContent: 'center',
+      backgroundColor: 'transparent',
+    },
+    '& .MuiTabs-indicatorSpan': {
+      display: 'none',
+      maxWidth: 0,
+      width: '100%',
+      backgroundColor: 'trasparent',
+    },
+  });
+
+  const StyledTab = styled((props) => <Tab  {...props} />)(
+    ({ theme }) => ({
+      textTransform: 'none',
+      fontSize: theme.typography.pxToRem(16),
+      marginRight: theme.spacing(1),
+      color: 'rgba(255, 255, 255, 0.7)',
+      '&.Mui-selected': {
+        color: '#000015',
+    marginTop: '10px',
+    borderTop: '3px solid #f9b115',
+    borderRight: '3px solid #f9b115',
+    borderLeft: '3px solid #f9b115',
+    borderRadius: '5px 5px 0px 0px',
+    background: '#fff',
+    fontSize: 18
+      },
+      '&.Mui-focusVisible': {
+        backgroundColor: 'transparent',
+      },
+    }),
+  );
+
+  return (
+    <CCard>
+      <Box sx={{ width: '100%' }}>
+        <Box sx={{ backgroundColor:'#1a2231', padding: '0 5px'}}>
+          <StyledTabs value={value} onChange={handleChange} aria-label="basic tabs example">
+            <StyledTab
+              label={(
+                <span>Payments Requets
+                  <CBadge color="danger" shape="rounded-pill">2</CBadge>
+                </span>)}
+                {...a11yProps(0)}
             />
-        </>
-    )
+            <StyledTab label="Payment Transactions" {...a11yProps(1)} />
+          </StyledTabs>
+        </Box>
+        <TabPanel value={value} index={0}>
+          <PaymentsList/>
+        </TabPanel>
+        <TabPanel value={value} index={1}>
+          <WithdrawalRequests/>
+        </TabPanel>
+      </Box>
+    </CCard>
+  )
+}
+
+function TabPanel(props) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box sx={{ p: 1 }}>
+          {children}
+        </Box>
+      )}
+    </div>
+  );
+}
+
+
+function a11yProps(index) {
+  return {
+    id: `simple-tab-${index}`,
+    'aria-controls': `simple-tabpanel-${index}`,
+  };
 }
 
 export default Payments

@@ -9,6 +9,7 @@ import paymentsReducer from './payments.reducer';
 import userReducer from './users.reducer';
 import nationalAdminsReducer from './nationalAdmins.reducer'
 import pricesReducer from './prices.reducer'
+import withdrawalRequests from './withdrawalRequest.reducer';
 
 import { combineReducers } from "redux";
 
@@ -23,7 +24,8 @@ const reducers = combineReducers({
   payments: paymentsReducer,
   users: userReducer,
   nationalAdmins: nationalAdminsReducer,
-  prices:pricesReducer
+  prices:pricesReducer,
+  withdrawalRequests: withdrawalRequests
 });
 
 export default reducers

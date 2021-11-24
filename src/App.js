@@ -9,6 +9,7 @@ import { getUsers } from './store/actions/users.action'
 import { getNationalAdmins } from './store/actions/nationalAdmins.action'
 import { getPrices } from './store/actions/prices.action'
 import { getOrders } from './store/actions/orders.action'
+import { getWithdrawalRequests } from './store/actions/withdrawalRequest.action'
 
 
 const loading = (
@@ -39,6 +40,7 @@ const App = () => {
     dispatch(getNationalAdmins());
     dispatch(getPrices());
     dispatch(getOrders());
+    dispatch(getWithdrawalRequests());
     return 0;
   }, []);
 
