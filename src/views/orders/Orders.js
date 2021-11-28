@@ -46,23 +46,23 @@ const Orders = () => {
                     <div>
                         <ReactCountryFlag
                             className="emojiFlag"
-                            countryCode={order.buyer?.userLocation?.isoCode}
+                            countryCode={order.deliverTo?.isoCode}
                             style={{
                                 fontSize: '1em',
                                 lineHeight: '1em',
                             }}
-                            aria-label="United States" />{' '}
+                            aria-label={order.deliverTo?.isoCode} />{' '}
                         {order.buyer?.userName}
                     </div>
                     <div className="pt-1 pb-1">
-                        {order.buyer?.userContacts?.tel}
+                        {order.buyer?.userPhone}
                     </div>
                     <div className="small text-medium-emphasis">
-                        <span>{order.buyer?.userLocation?.locality}</span> {', '}
-                        <span>{order.buyer?.userLocation?.name}</span>
+                        <span>{order.deliverTo?.locality}</span> {', '}
+                        <span>{order.deliverTo?.name}</span>
                     </div>
                 </div>),
-                vendor: (<div className="p-1">
+                vendor: order.orderState?.status.toLowerCase() !== 'new' ?  (<div className="p-1">
                     <div>
                         <ReactCountryFlag
                             className="emojiFlag"
@@ -81,7 +81,7 @@ const Orders = () => {
                         <span>{order.station?.businessLocation?.locality}</span> {', '}
                         <span>{order.station?.businessLocation?.name}</span>
                     </div>
-                </div>),
+                </div>) : 'Waiting for Acceptance',
                 status: order.orderState?.status.toUpperCase(),
                 time: moment.unix(order.createdAt).format("Do MMM YYYY @ h:m a"),
                 quantity: `${order.orderQuantity}kg`,
@@ -102,10 +102,10 @@ const Orders = () => {
                                     cancelButtonColor: '#f9b115',
                                     confirmButtonText: 'Yes, delete it!',
                                     cancelButtonText: 'No, cancel',
-                                  })
-                                  if(alertResponse.isConfirmed){
+                                })
+                                if (alertResponse.isConfirmed) {
                                     dispatch(deleteOrder(order.id, order.orderId));
-                                  }
+                                }
                             }} color="danger"><DeleteForever /></CButton>
                         </CButtonGroup>
                     </>
@@ -116,7 +116,7 @@ const Orders = () => {
 
     const columns = [
         {
-            name: "Order ID",
+            name: "ID",
             selector: (row) => row.id,
             sortable: true,
             grow: 1,
@@ -164,58 +164,61 @@ const Orders = () => {
 
     return (
         <>
-            <CRow>
-                <CCol xs={4}>
-                    <CWidgetStatsB
-                        className="mb-3"
-                        progress={{ color: 'warning', value: 40 }}
-                        text="orders pending acceptance"
-                        title="New Orders"
-                        value={newOrders.value}
-                    />
-                </CCol>
-                <CCol xs={4}>
-                    <CWidgetStatsB
-                        className="mb-3"
-                        progress={{ color: 'info', value: 60 }}
-                        text="orders pending acceptance"
-                        title="Pending Orders"
-                        value={pendingOrders.value}
-                    />
-                </CCol>
-                <CCol xs={4}>
-                    <CWidgetStatsB
-                        className="mb-3"
-                        progress={{ color: 'success', value: 100 }}
-                        text="Note: Excluding rejected"
-                        title="Completed Orders"
-                        value={completedOrders.value}
-                    />
-                </CCol>
-            </CRow>
-            <CustomDataTable
-                title="All Orders"
-                actions={
-                    <CButton
-                        size="sm"
-                        shape="rounded-0"
-                        onClick={() => history.push('/national-admins/create')}
-                        color="warning"
-                    >
-                        Export
-                    </CButton>
-                }
-                columns={columns}
-                data={orders}
-                onChangePage={(page, totalRows) => {
-                    console.log(page, totalRows);
-                }}
-                onChangeRowsPerPage={(currentRowsPerPage) => {
-                    console.log('onChangeRowsPerPage running');
-                    console.log(currentRowsPerPage);
-                }}
-            />
+            {orders.length > 0 ? <>
+                <CRow>
+                    <CCol xs={4}>
+                        <CWidgetStatsB
+                            className="mb-3"
+                            progress={{ color: 'warning', value: 40 }}
+                            text="orders pending acceptance"
+                            title="New Orders"
+                            value={newOrders.value}
+                        />
+                    </CCol>
+                    <CCol xs={4}>
+                        <CWidgetStatsB
+                            className="mb-3"
+                            progress={{ color: 'info', value: 60 }}
+                            text="orders pending acceptance"
+                            title="Pending Orders"
+                            value={pendingOrders.value}
+                        />
+                    </CCol>
+                    <CCol xs={4}>
+                        <CWidgetStatsB
+                            className="mb-3"
+                            progress={{ color: 'success', value: 100 }}
+                            text="Note: Excluding rejected"
+                            title="Completed Orders"
+                            value={completedOrders.value}
+                        />
+                    </CCol>
+                </CRow>
+                <CustomDataTable
+                    title="All Orders"
+                    actions={
+                        <CButton
+                            size="sm"
+                            shape="rounded-0"
+                            onClick={() => history.push('/national-admins/create')}
+                            color="warning"
+                        >
+                            Export
+                        </CButton>
+                    }
+                    columns={columns}
+                    data={orders}
+                    onChangePage={(page, totalRows) => {
+                        console.log(page, totalRows);
+                    }}
+                    onChangeRowsPerPage={(currentRowsPerPage) => {
+                        console.log('onChangeRowsPerPage running');
+                        console.log(currentRowsPerPage);
+                    }}
+                />
+            </> : <p className='text-center text-muted mt-5 mb-5' >No Payent Request Made</p>}
         </>
+
     )
 }
 

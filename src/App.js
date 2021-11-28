@@ -10,6 +10,7 @@ import { getNationalAdmins } from './store/actions/nationalAdmins.action'
 import { getPrices } from './store/actions/prices.action'
 import { getOrders } from './store/actions/orders.action'
 import { getWithdrawalRequests } from './store/actions/withdrawalRequest.action'
+import { getPayments } from './store/actions/payments.action'
 
 
 const loading = (
@@ -41,6 +42,7 @@ const App = () => {
     dispatch(getPrices());
     dispatch(getOrders());
     dispatch(getWithdrawalRequests());
+    dispatch(getPayments())
     return 0;
   }, []);
 

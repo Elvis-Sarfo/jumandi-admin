@@ -9,8 +9,10 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import { cilBell, cilEnvelopeOpen, cilList, cilMenu, cibEx } from '@coreui/icons'
 import WithdrawalRequests from './WithdrawalRequests';
-import PaymentsList from './PaymentsList';
+import Transactions from './Transactions'
 import { styled } from '@mui/material/styles';
+import {useSelector } from 'react-redux'
+
 import {
   CBadge,
   CCard,
@@ -19,6 +21,7 @@ import {
 const Payments = () => {
 
   const [value, setValue] = useState(0);
+  const newWithdrawalRequests = useSelector((state) => state.withdrawalRequests.summary.newWithdrawalRequests);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -73,18 +76,18 @@ const Payments = () => {
             <StyledTab
               label={(
                 <span>Payments Requets
-                  <CBadge color="danger" shape="rounded-pill">2</CBadge>
+                 {newWithdrawalRequests.value > 0 && <CBadge color="danger" shape="rounded-pill">{newWithdrawalRequests.value}</CBadge>}
                 </span>)}
                 {...a11yProps(0)}
             />
-            <StyledTab label="Payment Transactions" {...a11yProps(1)} />
+            <StyledTab label="Transactions" {...a11yProps(1)} />
           </StyledTabs>
         </Box>
         <TabPanel value={value} index={0}>
-          <PaymentsList/>
+        <WithdrawalRequests/>
         </TabPanel>
         <TabPanel value={value} index={1}>
-          <WithdrawalRequests/>
+          <Transactions/>
         </TabPanel>
       </Box>
     </CCard>

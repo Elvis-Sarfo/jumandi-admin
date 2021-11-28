@@ -39,16 +39,15 @@ const OrderDatails = () => {
 
   useEffect(() => {
     onSnapshot(docRef, (snapshot) => {
-      console.log(snapshot.data());
       setData(snapshot.data());
     });
   }, [])
 
   const center = {
-    lat: 59.95,
-    lng: 30.33
+    lat: data.deliverTo?.lat ? data.deliverTo?.lat : 6.7005598,
+    lng: data.deliverTo?.lng ? data.deliverTo?.lng :-1.676842
   };
-  const zoom = 11;
+  const zoom = 12;
 
   return (
     <div>
@@ -65,7 +64,7 @@ const OrderDatails = () => {
             </CRow>
           </CContainer>
 
-          <CContainer style={{ marginBottom: 0,borderBottom: '1px solid #c4c9d0',}}>
+          <CContainer style={{ marginBottom: 0, borderBottom: '1px solid #c4c9d0', }}>
             <CRow>
               <CCol md="2" className="py-3">
                 <h6 style={{ color: '#8a93a2' }}>Order Information</h6>
@@ -105,88 +104,98 @@ const OrderDatails = () => {
             </CRow>
           </CContainer>
 
-          <CContainer style={{ marginBottom: 0,borderBottom: '1px solid #c4c9d0',}}>
+          <CContainer style={{ marginBottom: 0, borderBottom: '1px solid #c4c9d0', }}>
             <CRow>
               <CCol md="2" className="py-3">
                 <h6 style={{ color: '#8a93a2' }}>Payment Information</h6>
               </CCol>
-              <CCol md="5" className="py-3">
-                <h6 className='text-muted'>Amount</h6>
-                <p>{data.paymentDetails?.amount}</p>
+              {(data.paymentDetails && Object.keys(data.paymentDetails).length !== 0) ? (<>
+                <CCol md="5" className="py-3">
+                  <h6 className='text-muted'>Amount</h6>
+                  <p>{data.paymentDetails?.amount}</p>
 
-                <h6 className='text-muted'>Transaction ID</h6>
-                <p>{data.paymentDetails?.transactionId}</p>
+                  <h6 className='text-muted'>Transaction ID</h6>
+                  <p>{data.paymentDetails?.transactionId}</p>
 
-                <h6 className='text-muted'>Reference</h6>
-                <p> <CBadge color="secondary"> {data.paymentDetails?.reference} </CBadge></p>
+                  <h6 className='text-muted'>Reference</h6>
+                  <p> <CBadge color="secondary"> {data.paymentDetails?.reference} </CBadge></p>
 
-                <h6 className='text-muted'>Time</h6>
-                <p>{moment.unix(data.paymentDetails?.at).format("MM/DD/YYYY h:m a")}</p>
-              </CCol>
-              <CCol md="5" className="py-3">
-                <h6 className='text-muted'>Pay Type</h6>
-                <p>{data.paymentDetails?.payType}</p>
+                  <h6 className='text-muted'>Time</h6>
+                  <p>{moment.unix(data.paymentDetails?.at).format("MM/DD/YYYY h:m a")}</p>
+                </CCol>
+                <CCol md="5" className="py-3">
+                  <h6 className='text-muted'>Pay Type</h6>
+                  <p>{data.paymentDetails?.payType}</p>
 
-                <h6 className='text-muted'>Bank</h6>
-                <p>USD {data.paymentDetails?.name}</p>
+                  <h6 className='text-muted'>Bank</h6>
+                  <p>USD {data.paymentDetails?.name}</p>
 
-                <h6 className='text-muted'>Account Name</h6>
-                <p>{data.paymentDetails?.accountName}</p>
+                  <h6 className='text-muted'>Account Name</h6>
+                  <p>{data.paymentDetails?.accountName}</p>
 
-                <h6 className='text-muted'>Number</h6>
-                <p>{data.paymentDetails?.number}</p>
+                  <h6 className='text-muted'>Number</h6>
+                  <p>{data.paymentDetails?.number}</p>
+                </CCol>
+              </>) : (<CCol md="10" className="py-3">
+                <p style={{ color: '#8a93a2' }}>Awaitng Payment</p>
+              </CCol>)}
 
-              </CCol>
+
             </CRow>
           </CContainer>
 
-          <CContainer style={{ marginBottom: 0,borderBottom: '1px solid #c4c9d0',}}>
+          <CContainer style={{ marginBottom: 0, borderBottom: '1px solid #c4c9d0', }}>
             <CRow>
               <CCol md="2" className="py-3">
                 <h6 style={{ color: '#8a93a2' }}>Vendor Information</h6>
               </CCol>
-              <CCol md="5" className="py-3">
+              {data.orderState?.status.toLowerCase() !== 'new' ? (<>
+                <CCol md="5" className="py-3">
 
-                {
-                  data.station?.businessLogo ?
-                    <CAvatar size="xl" src={data.station?.businessLogo} /> :
-                    <CAvatar size="xl" color="primary"> {data.station?.businessName[0].toUpperCase()} </CAvatar>
-                }
+                  {
+                    data.station?.businessLogo ?
+                      <CAvatar size="xl" src={data.station?.businessLogo} /> :
+                      <CAvatar size="xl" color="primary"> {data.station?.businessName[0].toUpperCase()} </CAvatar>
+                  }
 
-                <p style={{ fontSize: '18px', marginTop: 10 }}>
-                  {data.station?.businessName.toUpperCase()}
-                </p>
+                  <p style={{ fontSize: '18px', marginTop: 10 }}>
+                    {data.station?.businessName.toUpperCase()}
+                  </p>
 
-                <h6 className='text-muted'>Business Phone</h6>
-                <p>{data.station?.businessContacts?.phone1}</p>
+                  <h6 className='text-muted'>Business Phone</h6>
+                  <p>{data.station?.businessContacts?.phone1}</p>
 
-              </CCol>
-              <CCol md="5" className="py-3">
+                </CCol>
+                <CCol md="5" className="py-3">
 
-                <h6 className='text-muted'>Business Email</h6>
-                <p>{data.station?.businessEmail}</p>
+                  <h6 className='text-muted'>Business Email</h6>
+                  <p>{data.station?.businessEmail}</p>
 
-                <h6 className='text-muted'>Business Location</h6>
-                <p className='mb-0'>
-                  <ReactCountryFlag
-                    className="emojiFlag"
-                    countryCode={data.station?.businessLocation?.isoCode}
-                    style={{
-                      fontSize: '1em',
-                      lineHeight: '1em',
-                    }}
-                    aria-label="United States"
-                  />{' '}
-                  {data.station?.businessLocation?.country}
-                </p>
-                <p className='mb-0'>{data.station?.businessLocation?.locality}</p>
-                <p className='mb-0'>{data.station?.businessLocation?.name}</p>
+                  <h6 className='text-muted'>Business Location</h6>
+                  <p className='mb-0'>
+                    <ReactCountryFlag
+                      className="emojiFlag"
+                      countryCode={data.station?.businessLocation?.isoCode}
+                      style={{
+                        fontSize: '1em',
+                        lineHeight: '1em',
+                      }}
+                      aria-label="United States"
+                    />{' '}
+                    {data.station?.businessLocation?.country}
+                  </p>
+                  <p className='mb-0'>{data.station?.businessLocation?.locality}</p>
+                  <p className='mb-0'>{data.station?.businessLocation?.name}</p>
 
-              </CCol>
+                </CCol>
+              </>) : (<CCol md="10" className="py-3">
+                <p style={{ color: '#8a93a2' }}>Awaitng Vendor Acceptance</p>
+              </CCol>)}
+
             </CRow>
           </CContainer>
 
-          <CContainer style={{ marginBottom: 0,borderBottom: '1px solid #c4c9d0',}}>
+          <CContainer style={{ marginBottom: 0, borderBottom: '1px solid #c4c9d0', }}>
             <CRow>
               <CCol md="2" className="py-3">
                 <h6 style={{ color: '#8a93a2' }}>Client Information</h6>
@@ -201,59 +210,49 @@ const OrderDatails = () => {
 
                 <p style={{ fontSize: '18px', marginTop: 10 }}>{data.buyer?.userName.toUpperCase()}</p>
 
-                <h6 className='text-muted'>Client Phone</h6>
-                <p>{data.buyer?.userContacts?.tel}</p>
-
               </CCol>
               <CCol md="5" className="py-3">
 
-                <h6 className='text-muted'>Client Email</h6>
-                <p>{data.buyer?.userContacts?.email}</p>
+                <h6 className='text-muted'>Client Phone</h6>
+                <p>{data.buyer?.userPhone}</p>
 
-                <h6 className='text-muted'>Client Location</h6>
-                <p className='mb-0'>
-                  <ReactCountryFlag
-                    className="emojiFlag"
-                    countryCode={data.buyer?.userLocation?.isoCode}
-                    style={{
-                      fontSize: '1em',
-                      lineHeight: '1em',
-                    }}
-                    aria-label="United States"
-                  />{' '}
-                  {data.buyer?.userLocation?.country}
-                </p>
-                <p className='mb-0'>{data.buyer?.userLocation?.locality}</p>
-                <p className='mb-0'>{data.buyer?.userLocation?.name}</p>
+                <h6 className='text-muted'>Client Email</h6>
+                <p>{data.buyer?.userEmail}</p>
 
               </CCol>
             </CRow>
           </CContainer>
 
-          <CContainer style={{ marginBottom: 0,borderBottom: '1px solid #c4c9d0',}}>
+          <CContainer style={{ marginBottom: 0 }}>
             <CRow>
               <CCol style={{ color: '#8a93a2' }} md="2" className="py-3">
                 <h6 >Location</h6>
-                <p style={{ fontSize: '13px' }}>Last known location</p>
+                <p style={{ fontSize: '13px' }}>Order Location</p>
               </CCol>
               <CCol md="10" className="py-3">
                 <div style={{ height: '400px', width: '100%' }}>
                   <GoogleMapReact
-                    defaultCenter={center}
+                    defaultCenter={{...center, }}
                     defaultZoom={zoom}
                   >
-                    <Marker
-                      lat={data.buyer?.userLocation?.lat}
-                      lng={data.buyer?.userLocation?.lng}
-                      text="My Marker"
-                      color='blue'
-                    />
-                    <Marker
-                      lat={data.station?.businessLocation?.lat}
-                      lng={data.station?.businessLocation?.lng}
-                      text="My Marker"
-                      color='blue'
-                    />
+                    {
+                      data.deliverTo?.lat &&
+                      <Marker
+                        lat={data.deliverTo?.lat}
+                        lng={data.deliverTo?.lng}
+                        text="My Marker"
+                        color='red'
+                      />
+                    }
+                    {
+                      data.station?.businessLocation?.lat && <Marker
+                        lat={data.station?.businessLocation?.lat}
+                        lng={data.station?.businessLocation?.lng}
+                        text="My Marker"
+                        color='yellow'
+                      />
+                    }
+
                   </GoogleMapReact>
                 </div>
               </CCol>

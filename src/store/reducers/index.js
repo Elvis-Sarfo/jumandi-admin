@@ -5,11 +5,11 @@ import vendorsReducer from './vendors.reducer';
 import notificationsReducer from './notifications.reducer';
 import ordersReducer from './orders.reducer';
 import salesReducer from './sales.reducer';
-import paymentsReducer from './payments.reducer';
 import userReducer from './users.reducer';
 import nationalAdminsReducer from './nationalAdmins.reducer'
 import pricesReducer from './prices.reducer'
-import withdrawalRequests from './withdrawalRequest.reducer';
+import withdrawalRequestsReducer from './withdrawalRequest.reducer';
+import paymentsReducer from './payments.reducer'
 
 import { combineReducers } from "redux";
 
@@ -21,11 +21,11 @@ const reducers = combineReducers({
   notification: notificationsReducer,
   orders: ordersReducer,
   salesReducer: salesReducer,
-  payments: paymentsReducer,
   users: userReducer,
   nationalAdmins: nationalAdminsReducer,
   prices:pricesReducer,
-  withdrawalRequests: withdrawalRequests
+  withdrawalRequests: withdrawalRequestsReducer,
+  payments: paymentsReducer
 });
 
 export default reducers

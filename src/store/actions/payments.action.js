@@ -1,30 +1,30 @@
 import React from 'react'
-import { collection, addDoc, getDoc, serverTimestamp, doc, getDocs, onSnapshot, updateDoc } from '@firebase/firestore';
+import { collection, setDoc, getDoc, serverTimestamp, doc, getDocs, onSnapshot, updateDoc } from '@firebase/firestore';
 import Toast from '../../components/Toast';
 
 const collectionName = 'payments';
 
-export const getOrders = () => {
+export const getPayments = () => {
   return (dispatch, getState, { firestore }) => {
     const collectionRef = collection(firestore, collectionName);
     onSnapshot(collectionRef, (snapshot) => {
-      let orders = snapshot.docs;
-      dispatch({ type: 'GET_ORDERS', orders })
+      let payments = snapshot.docs;
+      dispatch({ type: 'GET_PAYMENTS', payments })
     });
   };
 }
 
-export const deleteOrder = (id,orderId) => {
+export const deletePayment = (id,paymentId) => {
   return async (dispatch, getState, { firestore }) => {
     const docRef = doc(firestore, collectionName, id);
     await updateDoc(docRef, {
-      orderState: {
+      paymentState: {
         changeAt: Date.now(),
         reason:['Deleted by the Admin'],
         status: 'deleted'
       }
     });
-    dispatch({ type: 'UPDATE_UI', toast: (<Toast color='green' title='Task Complete' message={`Order ${orderId} has been deleted`} />) });
+    dispatch({ type: 'UPDATE_UI', toast: (<Toast color='green' title='Task Complete' message={`Payment ${paymentId} has been deleted`} />) });
   }
 }
 
@@ -32,7 +32,7 @@ export const deleteOrder = (id,orderId) => {
  * Create a new National Admin
  * @param  {Object} data
  */
- export const createNationalAdmin = (data) => {
+ export const createPayment = (data) => {
   return async (dispatch, getState, { firestore, storage }) => {
     try {
       // get the collection schema
@@ -50,4 +50,3 @@ export const deleteOrder = (id,orderId) => {
     }
   }
 }
-

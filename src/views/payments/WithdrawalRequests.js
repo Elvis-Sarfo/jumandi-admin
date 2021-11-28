@@ -1,11 +1,10 @@
 import React, { useState } from 'react'
-import data from "./test";
-import { useHistory } from 'react-router-dom';
-import CustomDataTable from "./../../components/CustomDataTable";
-import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom'
+import CustomDataTable from './../../components/CustomDataTable'
+import { useDispatch, useSelector } from 'react-redux'
 import moment from 'moment'
-import { DeleteForever, Visibility, Edit } from '@mui/icons-material';
-import ReactCountryFlag from "react-country-flag"
+import { DeleteForever, Visibility, Edit } from '@mui/icons-material'
+import ReactCountryFlag from 'react-country-flag'
 import { cilBell, cilEnvelopeOpen, cilList, cilMenu, cibEx } from '@coreui/icons'
 import {
   CButton,
@@ -27,6 +26,8 @@ function WithdrawalRequests() {
   const cancelledWithdrawalRequests = dataSummary?.cancelledWithdrawalRequests;
   const totalWithdrawalRequests = dataSummary?.totalWithdrawalRequests;
 
+
+  console.log(newWithdrawalRequests);
   // Structure the data that is coming from firebase
   function getStructuredData(data) {
     return data.map((withdrawalRequest) => {
@@ -39,17 +40,17 @@ function WithdrawalRequests() {
           <div className="pt-1 pb-1">
             {'+23354587845'}
           </div>
-            <div className="small text-medium-emphasis">
-              <ReactCountryFlag
-                className="emojiFlag"
-                countryCode={'GH'}
-                style={{
-                  fontSize: '1em',
-                  lineHeight: '1em',
-                }}
-                aria-label="Ghana" />{' '}
-              <span>{'Ghana'}</span>
-            </div>
+          <div className="small text-medium-emphasis">
+            <ReactCountryFlag
+              className="emojiFlag"
+              countryCode={'GH'}
+              style={{
+                fontSize: '1em',
+                lineHeight: '1em',
+              }}
+              aria-label="Ghana" />{' '}
+            <span>{'Ghana'}</span>
+          </div>
         </div>),
         amount: `${withdrawalRequest.currency} ${withdrawalRequest.amount}`,
         bankInfo: (<div className="p-1">
@@ -84,81 +85,82 @@ function WithdrawalRequests() {
 
   const columns = [
     {
-      name: "Directior",
+      name: "Vendor",
       selector: (row) => row.vendor,
       sortable: true
     },
     {
-      name: "Runtime",
+      name: "Bank Details",
       selector: (row) => row.bankInfo,
       sortable: true,
       right: true
     },
     {
-      name: "Runtime",
+      name: "Amount",
       selector: (row) => row.amount,
       sortable: true,
       right: true
     },
     {
-      name: "Runtime",
+      name: "Status",
       selector: (row) => row.status,
       sortable: true,
       right: true
     },
     {
-      name: "Runtime",
+      name: "Time",
       selector: (row) => row.time,
       sortable: true,
       right: true
     },
-    {
-      name: "Action",
-      selector: (row) => row.actions,
-      sortable: true,
-      right: true
-    },
+    // {
+    //   name: "Action",
+    //   selector: (row) => row.actions,
+    //   sortable: true,
+    //   right: true
+    // },
   ];
   return (
     <>
-      <CRow>
-        <CCol sm={6}>
-          <div className="border-start border-start-4 border-start-info py-1 px-3">
-            <div className="text-medium-emphasis small">New Kana</div>
-            <div className="fs-5 fw-semibold">9,123</div>
-          </div>
-        </CCol>
-        <CCol sm={6}>
-          <div className="border-start border-start-4 border-start-danger py-1 px-3 mb-3">
-            <div className="text-medium-emphasis small">Recurring Clients</div>
-            <div className="fs-5 fw-semibold">22,643</div>
-          </div>
-        </CCol>
-      </CRow>
-      <hr className="mt-0" />
-      <CustomDataTable
-        title="All Orders"
-        actions={
-          <CButton
-            size="sm"
-            shape="rounded-0"
-            onClick={() => history.push('/national-admins/create')}
-            color="warning"
-          >
-            Export
-          </CButton>
-        
-        }
-        columns={columns}
-        data={withdrawalRequests}
-        onChangePage={(page, totalRows) => {
-          console.log(page, totalRows);
-        }}
-        onChangeRowsPerPage={(currentRowsPerPage) => {
-          console.log('onChangeRowsPerPage running');
-          console.log(currentRowsPerPage);
-        }}
-      />
+      {withdrawalRequests.length > 0 ? <>
+        <CRow>
+          <CCol sm={6}>
+            <div className="border-start border-start-4 border-start-info py-1 px-3">
+              <div className="text-medium-emphasis small">New Requests</div>
+              <div className="fs-5 fw-semibold">{newWithdrawalRequests.value}</div>
+            </div>
+          </CCol>
+          <CCol sm={6}>
+            <div className="border-start border-start-4 border-start-danger py-1 px-3 mb-3">
+              <div className="text-medium-emphasis small">Total Amount of New Requests</div>
+              <div className="fs-5 fw-semibold">$ {newWithdrawalRequests.amount}</div>
+            </div>
+          </CCol>
+        </CRow>
+        <hr className="mt-0" />
+        <CustomDataTable
+          title="List of Payment Requests"
+          actions={
+            <CButton
+              size="sm"
+              shape="rounded-0"
+              onClick={() => history.push('/national-admins/create')}
+              color="warning"
+            >
+              Export
+            </CButton>
+          }
+          columns={columns}
+          data={withdrawalRequests}
+          onChangePage={(page, totalRows) => {
+            console.log(page, totalRows);
+          }}
+          onChangeRowsPerPage={(currentRowsPerPage) => {
+            console.log('onChangeRowsPerPage running');
+            console.log(currentRowsPerPage);
+          }}
+        />
+      </> : <p className='text-center text-muted mt-5 mb-5' >No Payent Request Made</p>}
     </>
   )
 }
