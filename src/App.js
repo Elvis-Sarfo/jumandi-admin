@@ -11,6 +11,7 @@ import { getPrices } from './store/actions/prices.action'
 import { getOrders } from './store/actions/orders.action'
 import { getWithdrawalRequests } from './store/actions/withdrawalRequest.action'
 import { getPayments } from './store/actions/payments.action'
+import { getSales } from './store/actions/sales.action'
 
 
 const loading = (
@@ -42,7 +43,8 @@ const App = () => {
     dispatch(getPrices());
     dispatch(getOrders());
     dispatch(getWithdrawalRequests());
-    dispatch(getPayments())
+    dispatch(getPayments());
+    dispatch(getSales());
     return 0;
   }, []);
 

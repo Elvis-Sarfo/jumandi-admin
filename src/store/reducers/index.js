@@ -20,7 +20,7 @@ const reducers = combineReducers({
   vendors: vendorsReducer,
   notification: notificationsReducer,
   orders: ordersReducer,
-  salesReducer: salesReducer,
+  sales: salesReducer,
   users: userReducer,
   nationalAdmins: nationalAdminsReducer,
   prices:pricesReducer,
