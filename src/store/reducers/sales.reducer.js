@@ -1,31 +1,19 @@
 
 const initialState = {
   summary: {
-    pendingOrders: {
+    totalNetSales: {
       percentage: 0,
       value: 0
     },
-    completedOrders: {
+    totalGrandSales: {
       percentage: 0,
       value: 0
     },
-    rejectedOrders: {
+    totalRevenue: {
       percentage: 0,
       value: 0
     },
-    acceptedOrders: {
-      percentage: 0,
-      value: 0
-    },
-    cancelledOrders: {
-      percentage: 0,
-      value: 0
-    },
-    newOrders: {
-      percentage: 0,
-      value: 0
-    },
-    totalOrders: 0
+    totalNumOfSales: 0
   },
   data: {},
   filteredData: [],
@@ -36,7 +24,7 @@ const ordersReducer = (state = initialState, { type, ...rest }) => {
   switch (type) {
     case 'GET_SALES':
       console.log(rest);
-      console.log('GET_SALES', getStructuredData(rest));
+      console.log({ ...state, ...getStructuredData(rest) });
       return { ...state, ...getStructuredData(rest) }
     case 'CREATE_SALE':
       return { ...state, ...rest }
@@ -59,6 +47,19 @@ const ordersReducer = (state = initialState, { type, ...rest }) => {
 const getStructuredData = ({ orders }) => {
 
   let data = {};
+  let totalNetSales = {
+    percentage: 0,
+    value: 0
+  };
+  let totalGrandSales = {
+    percentage: 0,
+    value: 0
+  };
+  let totalRevenue = {
+    percentage: 0,
+    value: 0
+  };
+  let totalNumOfSales = 0;
 
   // Loop over the data that is coming from the database
   orders.forEach((doc) => {
@@ -101,90 +102,22 @@ const getStructuredData = ({ orders }) => {
           revenue: Number((order.orderPrice * 0.2).toFixed(2))
         }
       }
+      ++totalNumOfSales;
+      totalNetSales.value += data[vendorId].netTotal;
+      totalGrandSales.value += data[vendorId].grandTotal;
+      totalRevenue.value += data[vendorId].revenue;
     }
   });
 
   return {
+    summary:{
+      totalNumOfSales,
+      totalNetSales,
+      totalGrandSales,
+      totalRevenue
+    },
     data
   };
 };
-
-
-// const getStructuredData = ({ orders }) => {
-
-//   const pendingOrders = {
-//     percentage: 0,
-//     value: 0
-//   };
-//   const completedOrders = {
-//     percentage: 0,
-//     value: 0
-//   };
-//   const newOrders = {
-//     percentage: 0,
-//     value: 0
-//   };
-//   const rejectedOrders = {
-//     percentage: 0,
-//     value: 0
-//   };
-//   const acceptedOrders = {
-//     percentage: 0,
-//     value: 0
-//   };
-//   const cancelledOrders = {
-//     percentage: 0,
-//     value: 0
-//   };
-//   let totalOrders = orders.length;
-//   const data = {};
-//   const filteredData = []
-
-//   /**
-//    * Loop through the list of document and structure the data
-//    */
-//   orders.forEach(doc => {
-//     // get the data from the document
-//     const order = doc.data();
-//     const orderState = order.orderState?.status.toLowerCase();
-//     if (orderState != 'deleted') {
-
-//     pendingOrders.value += orderState == 'pending' ? 1 : 0;
-//     completedOrders.value += orderState == 'completed' ? 1 : 0;
-//     newOrders.value += orderState == 'new' ? 1 : 0;
-//     rejectedOrders.value += orderState == 'rejected' ? 1 : 0;
-//     acceptedOrders.value += orderState == 'accepted' ? 1 : 0;
-//     cancelledOrders.value += orderState == 'cancelled' ? 1 : 0;
-
-//     // Pushed structured data into the data map
-
-//       data[order.orderId] = { id: doc.id, ...order };
-//       filteredData.push({ id: doc.id, ...order });
-//     }
-
-//   });
-
-//   // get the percentage of the order summaries
-//   pendingOrders.percentage = ((pendingOrders.value / totalOrders) * 100).toFixed(2);
-//   completedOrders.percentage = ((completedOrders.value / totalOrders) * 100).toFixed(2);
-//   newOrders.percentage = ((newOrders.value / totalOrders) * 100).toFixed(2);
-//   rejectedOrders.percentage = ((rejectedOrders.value / totalOrders) * 100).toFixed(2);
-//   acceptedOrders.percentage = ((acceptedOrders.value / totalOrders) * 100).toFixed(2);
-//   cancelledOrders.percentage = ((cancelledOrders.value / totalOrders) * 100).toFixed(2);
-//   // return the current state of the data
-//   return {
-//     summary: {
-//       pendingOrders,
-//       completedOrders,
-//       newOrders,
-//       rejectedOrders,
-//       acceptedOrders,
-//       cancelledOrders,
-//       totalOrders
-//     },
-//     data,
-//     filteredData
-//   }
-// };
 
 export default ordersReducer
