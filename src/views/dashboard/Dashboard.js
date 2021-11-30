@@ -24,6 +24,7 @@ import {
 import { CChartLine } from '@coreui/react-chartjs'
 import { getStyle, hexToRgba } from '@coreui/utils'
 import CIcon from '@coreui/icons-react'
+import { useDispatch, useSelector } from 'react-redux'
 import {
   cibCcAmex,
   cibCcApplePay,
@@ -58,6 +59,26 @@ import avatar6 from './../../assets/images/avatars/6.jpg'
 // const WidgetsBrand = lazy(() => import('../widgets/WidgetsBrand.js'))
 
 const Dashboard = () => {
+  // Sales Data Summary
+  const salesSummary = useSelector((state) => state.sales.summary);
+  // const totalNetSales = salesSummary?.totalNetSales;
+  // const totalGrandSales = salesSummary?.totalGrandSales;
+  // const totalRevenue = salesSummary?.totalRevenue;
+  // const totalNumOfSales = salesSummary?.totalNumOfSales;
+  const salesPerYear = salesSummary?.salesPerYear;
+
+  // Orders Data Summary
+  const ordersSummary = useSelector((state) => state.orders.summary);
+  // const pendingOrders = ordersSummary?.pendingOrders;
+  // const completedOrders = ordersSummary?.completedOrders;
+  // const newOrders = ordersSummary?.newOrders;
+  // const rejectedOrders = ordersSummary?.rejectedOrders;
+  // const acceptedOrders = ordersSummary?.acceptedOrders;
+  // const cancelledOrders = ordersSummary?.cancelledOrders;
+  // const totalOrders = ordersSummary?.totalOrders;
+  const ordersPerYear = ordersSummary?.ordersPerYear;
+
+console.log('Orderssssssssssss',ordersPerYear);
   const random = (min, max) => {
     return Math.floor(Math.random() * (max - min + 1) + min)
   }
@@ -186,15 +207,17 @@ const Dashboard = () => {
   return (
     <>
       {/* <WidgetsDropdown /> */}
-      {/*
+      
       <CCard className="mb-4">
         <CCardBody>
           <CRow>
             <CCol sm={5}>
               <h4 id="traffic" className="card-title mb-0">
-                Traffic
+                Order - Sales Chart
               </h4>
-              <div className="small text-medium-emphasis">January - July 2021</div>
+              <div className="small text-medium-emphasis">
+                {`${salesPerYear.months[0]} - ${salesPerYear.months[salesPerYear.months.length - 1]} ${new Date().getFullYear()}`}
+              </div>
             </CCol>
             <CCol sm={7} className="d-none d-md-block">
               <CButton color="primary" className="float-end">
@@ -217,49 +240,25 @@ const Dashboard = () => {
           <CChartLine
             style={{ height: '300px', marginTop: '40px' }}
             data={{
-              labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+              labels: salesPerYear.months,
               datasets: [
                 {
-                  label: 'My First dataset',
+                  label: 'Sales',
+                  backgroundColor: hexToRgba(getStyle('--cui-primary'), 10),
+                  borderColor: getStyle('--cui-primary'),
+                  pointHoverBackgroundColor: getStyle('--cui-primary'),
+                  borderWidth: 2,
+                  data: salesPerYear.sales,
+                  fill: true,
+                },
+                {
+                  label: 'Orders',
                   backgroundColor: hexToRgba(getStyle('--cui-info'), 10),
                   borderColor: getStyle('--cui-info'),
                   pointHoverBackgroundColor: getStyle('--cui-info'),
                   borderWidth: 2,
-                  data: [
-                    random(50, 200),
-                    random(50, 200),
-                    random(50, 200),
-                    random(50, 200),
-                    random(50, 200),
-                    random(50, 200),
-                    random(50, 200),
-                  ],
+                  data: ordersPerYear.orders,
                   fill: true,
-                },
-                {
-                  label: 'My Second dataset',
-                  backgroundColor: 'transparent',
-                  borderColor: getStyle('--cui-success'),
-                  pointHoverBackgroundColor: getStyle('--cui-success'),
-                  borderWidth: 2,
-                  data: [
-                    random(50, 200),
-                    random(50, 200),
-                    random(50, 200),
-                    random(50, 200),
-                    random(50, 200),
-                    random(50, 200),
-                    random(50, 200),
-                  ],
-                },
-                {
-                  label: 'My Third dataset',
-                  backgroundColor: 'transparent',
-                  borderColor: getStyle('--cui-danger'),
-                  pointHoverBackgroundColor: getStyle('--cui-danger'),
-                  borderWidth: 1,
-                  borderDash: [8, 5],
-                  data: [65, 65, 65, 65, 65, 65, 65],
                 },
               ],
             }}
@@ -287,7 +286,7 @@ const Dashboard = () => {
               },
               elements: {
                 line: {
-                  tension: 0.4,
+                  tension: 0.5,
                 },
                 point: {
                   radius: 0,
@@ -312,7 +311,7 @@ const Dashboard = () => {
             ))}
           </CRow>
         </CCardFooter>
-      </CCard> */}
+      </CCard>
 
       {/* <WidgetsBrand withCharts /> */}
 
@@ -455,19 +454,6 @@ const Dashboard = () => {
                     </CTableRow>
                   ))}
                 </CTableBody>
-                <CTableFoot>
-                  <CPagination align="end" aria-label="Page navigation example">
-                    <CPaginationItem aria-label="Previous" disabled>
-                      <span aria-hidden="true">&laquo;</span>
-                    </CPaginationItem>
-                    <CPaginationItem active>1</CPaginationItem>
-                    <CPaginationItem>2</CPaginationItem>
-                    <CPaginationItem>3</CPaginationItem>
-                    <CPaginationItem aria-label="Next">
-                      <span aria-hidden="true">&raquo;</span>
-                    </CPaginationItem>
-                  </CPagination>
-                </CTableFoot>
               </CTable>
             </CCardBody>
           </CCard>

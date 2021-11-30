@@ -25,6 +25,10 @@ const initialState = {
       percentage: 0,
       value: 0
     },
+    ordersPerYear: {
+      months: [],
+      orders: []
+    },
     totalOrders: 0
   },
   data: {},
@@ -47,6 +51,16 @@ const ordersReducer = (state = initialState, { type, ...rest }) => {
   }
 }
 
+
+function getInitialOrdersGraphData() {
+  const m = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  const now = new Date();
+  const months = m.slice(0, now.getMonth() + 1);
+  const orders = months.map(i => 0);
+  return { months, orders };
+
+}
+
 /**
  * @name getStructuredData
  * Structure the data that is coming from firebase
@@ -54,7 +68,7 @@ const ordersReducer = (state = initialState, { type, ...rest }) => {
  * @returns {Object}
  */
 const getStructuredData = ({ orders }) => {
-
+  const now = new Date();
   const pendingOrders = {
     percentage: 0,
     value: 0
@@ -79,6 +93,7 @@ const getStructuredData = ({ orders }) => {
     percentage: 0,
     value: 0
   };
+  const ordersPerYear = getInitialOrdersGraphData();
   let totalOrders = orders.length;
   const data = {};
   const filteredData = []
@@ -90,16 +105,21 @@ const getStructuredData = ({ orders }) => {
     // get the data from the document
     const order = doc.data();
     const orderState = order.orderState?.status.toLowerCase();
+
     if (orderState != 'deleted') {
+      let date = new Date(order.createdAt * 1000);
+      // todo: ask to see if we can include the new orders or not
+      if (date.getFullYear() == now.getFullYear())
+        ++ordersPerYear.orders[date.getMonth()];
 
-    pendingOrders.value += orderState == 'pending' ? 1 : 0;
-    completedOrders.value += orderState == 'completed' ? 1 : 0;
-    newOrders.value += orderState == 'new' ? 1 : 0;
-    rejectedOrders.value += orderState == 'rejected' ? 1 : 0;
-    acceptedOrders.value += orderState == 'accepted' ? 1 : 0;
-    cancelledOrders.value += orderState == 'cancelled' ? 1 : 0;
+      pendingOrders.value += orderState == 'pending' ? 1 : 0;
+      completedOrders.value += orderState == 'completed' ? 1 : 0;
+      newOrders.value += orderState == 'new' ? 1 : 0;
+      rejectedOrders.value += orderState == 'rejected' ? 1 : 0;
+      acceptedOrders.value += orderState == 'accepted' ? 1 : 0;
+      cancelledOrders.value += orderState == 'cancelled' ? 1 : 0;
 
-    // Pushed structured data into the data map
+      // Pushed structured data into the data map
 
       data[order.orderId] = { id: doc.id, ...order };
       filteredData.push({ id: doc.id, ...order });
@@ -123,7 +143,8 @@ const getStructuredData = ({ orders }) => {
       rejectedOrders,
       acceptedOrders,
       cancelledOrders,
-      totalOrders
+      totalOrders,
+      ordersPerYear
     },
     data,
     filteredData

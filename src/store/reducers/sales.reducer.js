@@ -13,6 +13,10 @@ const initialState = {
       percentage: 0,
       value: 0
     },
+    salesPerYear: {
+      months: [],
+      sales: []
+    },
     totalNumOfSales: 0
   },
   data: {},
@@ -23,8 +27,6 @@ const initialState = {
 const ordersReducer = (state = initialState, { type, ...rest }) => {
   switch (type) {
     case 'GET_SALES':
-      console.log(rest);
-      console.log({ ...state, ...getStructuredData(rest) });
       return { ...state, ...getStructuredData(rest) }
     case 'CREATE_SALE':
       return { ...state, ...rest }
@@ -37,6 +39,22 @@ const ordersReducer = (state = initialState, { type, ...rest }) => {
   }
 }
 
+function getMonths() {
+  const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  const now = new Date();
+  let m = months.slice(0, now.getMonth() + 1);
+  return m;
+}
+
+function getInitialSalesGraphData() {
+  const m = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  const now = new Date();
+  const months = m.slice(0, now.getMonth() + 1);
+  const sales = months.map(i => 0);
+  return {months, sales};
+
+}
+
 /**
  * @name getStructuredData
  * Structure the data that is coming from firebase
@@ -45,7 +63,7 @@ const ordersReducer = (state = initialState, { type, ...rest }) => {
  */
 // Structure the data that is coming from firebase
 const getStructuredData = ({ orders }) => {
-
+  const now = new Date();
   let data = {};
   let totalNetSales = {
     percentage: 0,
@@ -59,7 +77,9 @@ const getStructuredData = ({ orders }) => {
     percentage: 0,
     value: 0
   };
+  let salesPerYear = getInitialSalesGraphData();
   let totalNumOfSales = 0;
+
 
   // Loop over the data that is coming from the database
   orders.forEach((doc) => {
@@ -70,6 +90,9 @@ const getStructuredData = ({ orders }) => {
     // First check if the order has been completed before
     // IF: the order has been complete then it means it is a sale and we can work on that
     if (order.orderState?.status.toLowerCase() == 'completed') {
+      let date = new Date(order.createdAt * 1000);
+      console.log(date.getMonth());
+      if(date.getFullYear() == now.getFullYear()) ++salesPerYear.sales[date.getMonth()]
       // Check if the vendor id exists in the map.
       // IF: it exist you dont have to add it again,
       // Just update the data by incrementing numberOfOrders, netTotal, and grandTotal
@@ -84,8 +107,7 @@ const getStructuredData = ({ orders }) => {
         data[vendorId].netTotal = Number(data[vendorId].netTotal.toFixed(2));
         data[vendorId].grandTotal = Number(data[vendorId].grandTotal.toFixed(2));
         data[vendorId].revenue = Number(data[vendorId].revenue.toFixed(2));
-      }
-      else {
+      } else {
         data[vendorId] = {
           id: vendorId,
           vendor: {
@@ -110,11 +132,12 @@ const getStructuredData = ({ orders }) => {
   });
 
   return {
-    summary:{
+    summary: {
       totalNumOfSales,
       totalNetSales,
       totalGrandSales,
-      totalRevenue
+      totalRevenue,
+      salesPerYear
     },
     data
   };
