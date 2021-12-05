@@ -42,7 +42,7 @@ export default [
     user: (<div className="p-1">
       <div>
         <ReactCountryFlag
-          className="emojiFlag"
+          svg
           countryCode='GH'
           style={{
             fontSize: '1em',
@@ -63,7 +63,7 @@ export default [
     vendor: (<div className="p-1">
       <div>
         <ReactCountryFlag
-          className="emojiFlag"
+          svg
           countryCode='GH'
           style={{
             fontSize: '1em',
@@ -92,7 +92,7 @@ export default [
     user: (<div className="p-1">
       <div>
         <ReactCountryFlag
-          className="emojiFlag"
+          svg
           countryCode='GH'
           style={{
             fontSize: '1em',
@@ -113,7 +113,7 @@ export default [
     vendor: (<div className="p-1">
       <div>
         <ReactCountryFlag
-          className="emojiFlag"
+          svg
           countryCode='GH'
           style={{
             fontSize: '1em',
@@ -142,7 +142,7 @@ export default [
     user: (<div className="p-1">
       <div>
         <ReactCountryFlag
-          className="emojiFlag"
+          svg
           countryCode='GH'
           style={{
             fontSize: '1em',
@@ -163,7 +163,7 @@ export default [
     vendor: (<div className="p-1">
       <div>
         <ReactCountryFlag
-          className="emojiFlag"
+          svg
           countryCode='GH'
           style={{
             fontSize: '1em',
@@ -192,7 +192,7 @@ export default [
     user: (<div className="p-1">
       <div>
         <ReactCountryFlag
-          className="emojiFlag"
+          svg
           countryCode='GH'
           style={{
             fontSize: '1em',
@@ -213,7 +213,7 @@ export default [
     vendor: (<div className="p-1">
       <div>
         <ReactCountryFlag
-          className="emojiFlag"
+          svg
           countryCode='GH'
           style={{
             fontSize: '1em',

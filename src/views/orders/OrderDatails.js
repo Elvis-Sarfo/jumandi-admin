@@ -174,7 +174,7 @@ const OrderDatails = () => {
                   <h6 className='text-muted'>Business Location</h6>
                   <p className='mb-0'>
                     <ReactCountryFlag
-                      className="emojiFlag"
+                      svg
                       countryCode={data.station?.businessLocation?.isoCode}
                       style={{
                         fontSize: '1em',

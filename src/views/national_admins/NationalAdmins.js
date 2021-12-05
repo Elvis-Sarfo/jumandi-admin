@@ -50,7 +50,7 @@ const NationalAdmins = () => {
                 </div>),
                 country: (<div className="p-1">
                     {nationalAdmin.countryCode && <ReactCountryFlag
-                        className="emojiFlag"
+                        svg
                         countryCode={nationalAdmin.countryCode}
                         style={{
                             fontSize: '1em',

@@ -18,16 +18,16 @@ const _nav = [
     to: '/dashboard',
     icon: <CIcon icon={cilSpeedometer} customClassName="nav-icon" />,
   },
-  {
-    component: CNavItem,
-    name: 'Live Chats',
-    to: '/chat',
-    icon: <CIcon icon={cilChatBubble} customClassName="nav-icon" />,
-    badge: {
-      color: 'info',
-      text: 'NEW',
-    },
-  },
+  // {
+  //   component: CNavItem,
+  //   name: 'Live Chats',
+  //   to: '/chat',
+  //   icon: <CIcon icon={cilChatBubble} customClassName="nav-icon" />,
+  //   badge: {
+  //     color: 'info',
+  //     text: 'NEW',
+  //   },
+  // },
   {
     component: CNavItem,
     name: 'Sales',

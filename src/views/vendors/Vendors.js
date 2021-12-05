@@ -53,7 +53,7 @@ const Vendors = () => {
                 location: (<div className="p-1">
                     <div>
                         <ReactCountryFlag
-                            className="emojiFlag"
+                            svg
                             countryCode={vendor.businessLocation?.isoCode}
                             style={{
                                 fontSize: '1em',

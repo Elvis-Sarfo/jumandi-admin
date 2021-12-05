@@ -45,7 +45,7 @@ const Orders = () => {
                 user: (<div className="p-1">
                     <div>
                         <ReactCountryFlag
-                            className="emojiFlag"
+                            svg
                             countryCode={order.deliverTo?.isoCode}
                             style={{
                                 fontSize: '1em',
@@ -65,7 +65,7 @@ const Orders = () => {
                 vendor: order.orderState?.status.toLowerCase() !== 'new' ?  (<div className="p-1">
                     <div>
                         <ReactCountryFlag
-                            className="emojiFlag"
+                            svg
                             countryCode={order.station?.businessLocation?.isoCode}
                             style={{
                                 fontSize: '1em',

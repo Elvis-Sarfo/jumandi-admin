@@ -50,7 +50,7 @@ const Sales = () => {
                 country: (<div className="p-1">
                     <div>
                         <ReactCountryFlag
-                            className="emojiFlag"
+                            svg
                             countryCode={sale.vendor?.location?.isoCode}
                             style={{
                                 fontSize: '1em',

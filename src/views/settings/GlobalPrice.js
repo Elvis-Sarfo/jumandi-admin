@@ -195,7 +195,7 @@ function buildPriceItem(price,dispatch) {
         <CRow>
             <CCol md="2" className="py-3">
                 <ReactCountryFlag
-                    className="emojiFlag"
+                    svg
                     countryCode={price.countryCode}
                     style={{
                         fontSize: '2em',

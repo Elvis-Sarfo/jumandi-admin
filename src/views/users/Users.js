@@ -55,7 +55,7 @@ const Users = () => {
                 actions: (
                     <>
                         <CButtonGroup>
-                            <CButton onClick={() => history.push(`/supervisors/${user.id}`)} color="primary"><Visibility /></CButton>
+                            <CButton onClick={() => history.push(`/users/${user.id}`)} color="primary"><Visibility /></CButton>
                             {/* <CButton color="warning"><Edit/></CButton> */}
                             <CButton color="danger"><DeleteForever /></CButton>
                         </CButtonGroup>

@@ -25,6 +25,10 @@ const initialState = {
       percentage: 0,
       value: 0
     },
+    acceptedOrders: {
+      percentage: 0,
+      value: 0
+    },
     ordersPerYear: {
       months: [],
       orders: []
@@ -81,11 +85,11 @@ const getStructuredData = ({ orders }) => {
     percentage: 0,
     value: 0
   };
-  const rejectedOrders = {
+  const acceptedOrders = {
     percentage: 0,
     value: 0
   };
-  const acceptedOrders = {
+  const rejectedOrders = {
     percentage: 0,
     value: 0
   };
@@ -113,6 +117,7 @@ const getStructuredData = ({ orders }) => {
         ++ordersPerYear.orders[date.getMonth()];
 
       pendingOrders.value += orderState == 'pending' ? 1 : 0;
+      acceptedOrders.value += orderState == 'accepted' ? 1 : 0;
       completedOrders.value += orderState == 'completed' ? 1 : 0;
       newOrders.value += orderState == 'new' ? 1 : 0;
       rejectedOrders.value += orderState == 'rejected' ? 1 : 0;
@@ -128,12 +133,13 @@ const getStructuredData = ({ orders }) => {
   });
 
   // get the percentage of the order summaries
-  pendingOrders.percentage = ((pendingOrders.value / totalOrders) * 100).toFixed(2);
-  completedOrders.percentage = ((completedOrders.value / totalOrders) * 100).toFixed(2);
-  newOrders.percentage = ((newOrders.value / totalOrders) * 100).toFixed(2);
-  rejectedOrders.percentage = ((rejectedOrders.value / totalOrders) * 100).toFixed(2);
-  acceptedOrders.percentage = ((acceptedOrders.value / totalOrders) * 100).toFixed(2);
-  cancelledOrders.percentage = ((cancelledOrders.value / totalOrders) * 100).toFixed(2);
+  pendingOrders.percentage = calcPercentage(pendingOrders.value, totalOrders);
+  acceptedOrders.percentage = calcPercentage(acceptedOrders.value, totalOrders);
+  completedOrders.percentage = calcPercentage(completedOrders.value, totalOrders);
+  newOrders.percentage = calcPercentage(newOrders.value, totalOrders);
+  rejectedOrders.percentage = calcPercentage(rejectedOrders.value, totalOrders);
+  acceptedOrders.percentage = calcPercentage(acceptedOrders.value, totalOrders);
+  cancelledOrders.percentage = calcPercentage(cancelledOrders.value, totalOrders);
   // return the current state of the data
   return {
     summary: {
@@ -150,5 +156,14 @@ const getStructuredData = ({ orders }) => {
     filteredData
   }
 };
+
+function calcPercentage(value, total) {
+  let percent = ((value / total) * 100).toFixed(2);
+  if ( Number(percent)) {
+    return percent;
+  } else {
+    return 0;
+  }
+}
 
 export default ordersReducer

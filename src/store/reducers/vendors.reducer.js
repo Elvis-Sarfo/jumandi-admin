@@ -1,4 +1,4 @@
-
+import { calcPercentage } from './../../utils/common_functions'
 const initialState = {
   summary: {
     approvedVendors: {
@@ -8,6 +8,10 @@ const initialState = {
     pendingVendors: {
       percentage: 0,
       value: 0
+    },
+    contriesCount: {
+      ghana: 0,
+      nigeria: 0
     },
     totalVendors: 0
   },
@@ -50,6 +54,10 @@ const getStructuredData = ({ vendors }) => {
     percentage: 0,
     value: 0
   };
+  const contriesCount = {
+    ghana: 0,
+    nigeria: 0
+  };
   let totalVendors = vendors.length;
   const data = [];
 
@@ -59,6 +67,11 @@ const getStructuredData = ({ vendors }) => {
   vendors.forEach(doc => {
     // get the data from the document
     const vendor = doc.data();
+    const country = vendor.businessLocation?.country.toLowerCase();
+
+    // count the country
+    if (contriesCount[country]) contriesCount[country] += 1;
+    else contriesCount[country] = 1;
 
     // update the number of pending vendors
     pendingVendors.value += vendor.businessStatus?.toLowerCase() == 'pending' ? 1 : 0;
@@ -69,14 +82,15 @@ const getStructuredData = ({ vendors }) => {
     // Pushed structured data into the data array
     data.push({ id: doc.id, ...vendor });
   });
-  pendingVendors.percentage = ((pendingVendors.value / totalVendors) * 100).toFixed(2);
-  approvedVendors.percentage = ((approvedVendors.value / totalVendors) * 100).toFixed(2);;
+  pendingVendors.percentage = calcPercentage(pendingVendors.value, totalVendors);
+  approvedVendors.percentage = calcPercentage(approvedVendors.value, totalVendors);
   // return the current state of the data
   return {
     summary: {
       approvedVendors,
       pendingVendors,
-      totalVendors
+      totalVendors,
+      contriesCount
     },
     data
   }

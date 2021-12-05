@@ -1,4 +1,4 @@
-
+import { calcPercentage } from './../../utils/common_functions'
 const initialState = {
   summary: {
     enabledUsers: {
@@ -31,8 +31,6 @@ const usersReducer = (state = initialState, { type, ...rest }) => {
       return state
   }
 }
-
-
 
 /**
  * @name getStructuredData
@@ -69,8 +67,8 @@ const getStructuredData = ({ users }) => {
     // Pushed structured data into the data array
     data.push({ id: doc.id, ...user });
   });
-  enabledUsers.percentage = ((enabledUsers.value / totalUsers) * 100).toFixed(2);
-  disabledUsers.percentage = ((disabledUsers.value / totalUsers) * 100).toFixed(2);;
+  enabledUsers.percentage = calcPercentage(enabledUsers.value, totalUsers);
+  disabledUsers.percentage = calcPercentage(disabledUsers.value, totalUsers);
   // return the current state of the data
   return {
     summary: {

@@ -26,8 +26,6 @@ function WithdrawalRequests() {
   const cancelledWithdrawalRequests = dataSummary?.cancelledWithdrawalRequests;
   const totalWithdrawalRequests = dataSummary?.totalWithdrawalRequests;
 
-
-  console.log(newWithdrawalRequests);
   // Structure the data that is coming from firebase
   function getStructuredData(data) {
     return data.map((withdrawalRequest) => {
@@ -42,7 +40,7 @@ function WithdrawalRequests() {
           </div>
           <div className="small text-medium-emphasis">
             <ReactCountryFlag
-              className="emojiFlag"
+              svg
               countryCode={'GH'}
               style={{
                 fontSize: '1em',
