@@ -8,6 +8,8 @@ import { CBadge } from '@coreui/react'
 export const AppSidebarNav = ({ items }) => {
   const dispatch = useDispatch()
   const topNavTitile = useSelector((state) => state.ui.topNavTitile)
+  const newWithdrawalRequests = useSelector((state) => state.withdrawalRequests.summary.newWithdrawalRequests.value);
+  const pendingVendors = useSelector((state) => state.vendors.summary.pendingVendors.value);
   const location = useLocation()
 
   const navLink = (name, icon, badge) => {
@@ -26,21 +28,29 @@ export const AppSidebarNav = ({ items }) => {
 
   const navItem = (item, index) => {
     const { component, name, badge, icon, ...rest } = item
-    const Component = component
+    const Component = component;
+    // set the visibility of the badges
+    let _badge = {};
+    if (name === 'Payments' && newWithdrawalRequests) {
+      _badge = badge;
+    }
+    if (name === 'Vendors' && pendingVendors) {
+      _badge = badge;
+    }
     return (
       <Component
         {...(rest.to &&
           !rest.items && {
-            component: NavLink,
-            activeClassName: 'active',
-          })}
-        onClick={(e)=>{
+          component: NavLink,
+          activeClassName: 'active',
+        })}
+        onClick={(e) => {
           dispatch({ type: 'set', topNavTitile: name });
         }}
         key={index}
         {...rest}
       >
-        {navLink(name, icon, badge)}
+        {navLink(name, icon, _badge)}
       </Component>
     )
   }
@@ -53,6 +63,7 @@ export const AppSidebarNav = ({ items }) => {
         key={index}
         toggler={navLink(name, icon)}
         visible={location.pathname.startsWith(to)}
+        ba
         {...rest}
       >
         {item.items?.map((item, index) =>

@@ -10,6 +10,9 @@ import {
   cilChatBubble,
 } from '@coreui/icons'
 import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
+import {useSelector } from 'react-redux'
+
+
 
 const _nav = [
   {
@@ -93,7 +96,7 @@ const _nav = [
     icon: <CIcon icon={cilBabyCarriage} customClassName="nav-icon" />,
     badge: {
       color: 'success',
-      text: 'NEW',
+      text: 'PENDING',
     },
   },
   {
