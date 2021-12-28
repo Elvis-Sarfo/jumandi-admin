@@ -11,8 +11,8 @@ const uiReducer = (state = initialState, { type, ...rest }) => {
     case 'set':
       return { ...state, ...rest }
     case 'UPDATE_UI':
-        return { ...state, ...rest }
-      default:
+      return { ...state, ...rest }
+    default:
       return state
   }
 }

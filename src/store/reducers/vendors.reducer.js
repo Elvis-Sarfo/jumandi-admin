@@ -15,7 +15,7 @@ const initialState = {
     },
     totalVendors: 0
   },
-  data: [],
+  data: {},
   filter: ['This is a fitler'],
 }
 
@@ -59,7 +59,7 @@ const getStructuredData = ({ vendors }) => {
     nigeria: 0
   };
   let totalVendors = vendors.length;
-  const data = [];
+  const data = {};
 
   /**
    * Loop through the list of document and structure the data
@@ -80,7 +80,8 @@ const getStructuredData = ({ vendors }) => {
     approvedVendors.value += vendor.businessStatus?.toLowerCase() == 'approved' ? 1 : 0;
 
     // Pushed structured data into the data array
-    data.push({ id: doc.id, ...vendor });
+    // data.push({ id: doc.id, ...vendor });
+    data[doc.id] = { id: doc.id, ...vendor };
   });
   pendingVendors.percentage = calcPercentage(pendingVendors.value, totalVendors);
   approvedVendors.percentage = calcPercentage(approvedVendors.value, totalVendors);

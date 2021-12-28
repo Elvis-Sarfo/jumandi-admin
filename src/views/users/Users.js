@@ -1,11 +1,11 @@
 import React from 'react'
 import data from "./test";
-import { useHistory } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import CustomDataTable from "./../../components/CustomDataTable";
+import { useHistory } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import CustomDataTable from "./../../components/CustomDataTable"
 import { Icon, Switch } from '@mui/material';
-import { DeleteForever, Visibility, Edit } from '@mui/icons-material';
-import { updateUserStatus } from '../../store/actions/users.action';
+import { DeleteForever, Visibility, Edit } from '@mui/icons-material'
+import { updateUserStatus } from '../../store/actions/users.action'
 
 
 import {
@@ -31,8 +31,9 @@ const Users = () => {
     const enabledUsers = dataSummary?.enabledUsers;
 
     // Structure the data that is coming from firebase
-    function getStructuredData(rawData) {
-        return rawData.map((user) => {
+    function getStructuredData(data) {
+        return Object.keys(data).map((key) => {
+            const user = data[key];
             return {
                 id: user.id,
                 name: (<>
@@ -57,7 +58,7 @@ const Users = () => {
                         <CButtonGroup>
                             <CButton onClick={() => history.push(`/users/${user.id}`)} color="primary"><Visibility /></CButton>
                             {/* <CButton color="warning"><Edit/></CButton> */}
-                            <CButton color="danger"><DeleteForever /></CButton>
+                            <CButton className='text-white' color="danger"><DeleteForever /></CButton>
                         </CButtonGroup>
                     </>
                 )

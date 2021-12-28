@@ -203,7 +203,7 @@ const OrderDatails = () => {
               <CCol md="5" className="py-3">
 
                 {
-                  data.buyer?.userImage != undefined && data.buyer?.userImage ?
+                  data.buyer?.userImage !== undefined && data.buyer?.userImage ?
                     <CAvatar size="xl" src={data.buyer?.userImage} /> :
                     <CAvatar size="xl" color="primary"> {data.buyer?.userName[0].toUpperCase()} </CAvatar>
                 }

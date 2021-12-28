@@ -11,7 +11,7 @@ const initialState = {
     },
     totalUsers: 0
   },
-  data: [],
+  data: {},
   filter: ['This is a fitler'],
 }
 
@@ -49,7 +49,7 @@ const getStructuredData = ({ users }) => {
     value: 0
   };
   let totalUsers = users.length;
-  const data = [];
+  const data = {};
 
   /**
    * Loop through the list of document and structure the data
@@ -65,7 +65,7 @@ const getStructuredData = ({ users }) => {
     disabledUsers.value += !user.enabled ? 1 : 0;
 
     // Pushed structured data into the data array
-    data.push({ id: doc.id, ...user });
+    data[user.id] = { id: doc.id, ...user };
   });
   enabledUsers.percentage = calcPercentage(enabledUsers.value, totalUsers);
   disabledUsers.percentage = calcPercentage(disabledUsers.value, totalUsers);

@@ -110,7 +110,7 @@ const getStructuredData = ({ orders }) => {
     const order = doc.data();
     const orderState = order.orderState?.status.toLowerCase();
 
-    if (orderState != 'deleted') {
+    if (orderState !== 'deleted') {
       let date = new Date(order.createdAt * 1000);
       // todo: ask to see if we can include the new orders or not
       if (date.getFullYear() == now.getFullYear())

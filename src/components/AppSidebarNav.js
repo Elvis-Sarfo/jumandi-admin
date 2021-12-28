@@ -30,7 +30,7 @@ export const AppSidebarNav = ({ items }) => {
     const { component, name, badge, icon, ...rest } = item
     const Component = component;
     // set the visibility of the badges
-    let _badge = {};
+    let _badge;
     if (name === 'Payments' && newWithdrawalRequests) {
       _badge = badge;
     }
@@ -63,7 +63,6 @@ export const AppSidebarNav = ({ items }) => {
         key={index}
         toggler={navLink(name, icon)}
         visible={location.pathname.startsWith(to)}
-        ba
         {...rest}
       >
         {item.items?.map((item, index) =>

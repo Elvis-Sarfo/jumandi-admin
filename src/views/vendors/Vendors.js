@@ -41,8 +41,9 @@ const Vendors = () => {
     const approvedVendors = dataSummary?.approvedVendors;
 
     // Structure the data that is coming from firebase
-    function getStructuredData(rawData) {
-        return rawData.map((vendor) => {
+    function getStructuredData(data) {
+        return Object.keys(data).map((key) => {
+            const vendor = data[key];
             return {
                 id: vendor.id,
                 name: (<>
@@ -71,20 +72,20 @@ const Vendors = () => {
                 status: vendor.businessStatus,
                 approve: (
                     <Switch
-                        onChange= {(e) => {
+                        onChange={(e) => {
                             e.preventDefault();
                             const status = vendor.businessStatus?.toLowerCase() == 'approved' ? 'pending' : 'approved';
                             dispatch(updateVendorStatus(status, vendor.id));
                         }}
                         checked={vendor?.businessStatus?.toLowerCase()
-                             == 'approved'}
+                            == 'approved'}
                         color="success"
                     />
                 ),
                 actions: (
                     <>
                         <CButtonGroup>
-                            <CButton onClick={() => history.push(`/supervisors/${vendor.id}`)} color="primary"><Visibility /></CButton>
+                            <CButton onClick={() => history.push(`/vendors/${vendor.id}`)} color="primary"><Visibility /></CButton>
                             {/* <CButton color="warning"><Edit/></CButton> */}
                             <CButton color="danger"><DeleteForever /></CButton>
                         </CButtonGroup>
@@ -138,7 +139,7 @@ const Vendors = () => {
                 <CCol xs={4}>
                     <CWidgetStatsB
                         className="mb-3"
-                        progress={{ color: 'warning', value:parseFloat(pendingVendors?.percentage)}}
+                        progress={{ color: 'warning', value: parseFloat(pendingVendors?.percentage) }}
                         text={`${pendingVendors?.percentage}% vendors Pending`}
                         title="New Requests"
                         value={<b>{pendingVendors?.value}</b>}
@@ -147,7 +148,7 @@ const Vendors = () => {
                 <CCol xs={4}>
                     <CWidgetStatsB
                         className="mb-3"
-                        progress={{ color: 'success', value: parseFloat(approvedVendors?.percentage)}}
+                        progress={{ color: 'success', value: parseFloat(approvedVendors?.percentage) }}
                         text={`${approvedVendors?.percentage}% vendors Approved`}
                         title="Approved Vendors"
                         value={<b>{approvedVendors?.value}</b>}

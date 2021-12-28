@@ -93,7 +93,6 @@ const Transactions = () => {
           />
         </>
       }
-
       { payments.length === 0 && <> <p className='text-center text-muted mt-5 mb-5' >No Payents Made</p></>}
 
     </>
