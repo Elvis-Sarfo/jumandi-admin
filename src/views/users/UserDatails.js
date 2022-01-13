@@ -56,7 +56,7 @@ const UserDatails = () => {
                 <h6 style={{ color: '#8a93a2' }}>Client Information</h6>
               </CCol> */}
               <CCol md="6" className="py-3">
-                <div>
+              <div style={{width: 70, height: 70, overflow: 'hidden'}} >
                   {
                     user?.userImage != undefined && user?.userImage ?
                       <CAvatar style={{ width: "6rem", height: "6rem" }} size="xl" src={user?.userImage} /> :
