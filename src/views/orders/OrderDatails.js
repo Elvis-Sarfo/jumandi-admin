@@ -201,12 +201,13 @@ const OrderDatails = () => {
                 <h6 style={{ color: '#8a93a2' }}>Client Information</h6>
               </CCol>
               <CCol md="5" className="py-3">
-
+                <div style={{width: 70, height: 70, overflow: 'hidden'}} >
                 {
                   data.buyer?.userImage !== undefined && data.buyer?.userImage ?
                     <CAvatar size="xl" src={data.buyer?.userImage} /> :
                     <CAvatar size="xl" color="primary"> {data.buyer?.userName[0].toUpperCase()} </CAvatar>
                 }
+                </div>
 
                 <p style={{ fontSize: '18px', marginTop: 10 }}>{data.buyer?.userName.toUpperCase()}</p>
 

@@ -44,7 +44,7 @@ const Sales = () => {
                 id: sale.id,
                 vendor: (<>
                     <CAvatar size="md" src={sale.vendor?.logo} />
-                    <span style={{ marginLeft: 7 }}>{sale.vendor?.logo}</span>
+                    <span style={{ marginLeft: 7 }}>{sale.vendor?.name}</span>
                 </>
                 ),
                 country: (<div className="p-1">
@@ -70,7 +70,7 @@ const Sales = () => {
 
     const columns = [
         {
-            grow: 2,
+            grow: 3,
             name: "Sale",
             selector: (row) => row.vendor,
             sortable: true
@@ -85,7 +85,7 @@ const Sales = () => {
             name: "Orders",
             selector: (row) => row.numOfOrders,
             sortable: true,
-            center: true
+            right: true
         },
         {
             name: "Grand Total",

@@ -72,9 +72,9 @@ const VendorDatails = () => {
               <CCol md="5" className="py-3">
 
                 <h6 className='text-muted'>Client Phone</h6>
-                {/* <p>{vendor?.businessContacts.phone1} | {vendor?.businessContacts.phone2}</p> */}
+                <p>{vendor?.businessContacts.phone1} | {vendor?.businessContacts.phone2}</p>
                 <h6 className='text-muted'>Client Email</h6>
-                {/* <p>{vendor?.vendorEmail}</p> */}
+                <p>{vendor?.vendorEmail}</p>
 
               </CCol>
             </CRow>
