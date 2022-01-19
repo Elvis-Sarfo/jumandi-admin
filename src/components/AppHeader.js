@@ -16,11 +16,12 @@ import { cilBell, cilEnvelopeOpen, cilList, cilMenu } from '@coreui/icons'
 
 import { AppBreadcrumb } from './index'
 import { AppHeaderDropdown } from './header/index'
-import { logo } from './../assets/brand/logo'
+import logo from './../assets/brand/logo_dark.png'
 
 const AppHeader = () => {
   const dispatch = useDispatch()
-  const sidebarShow = useSelector((state) => state.sidebarShow)
+  const sidebarShow = useSelector((state) => state.ui.sidebarShow)
+  const topNavTitile = useSelector((state) => state.ui.topNavTitile)
 
   return (
     <CHeader position="sticky" className="mb-4 p-bg-color">
@@ -32,12 +33,12 @@ const AppHeader = () => {
           <CIcon icon={cilMenu} className="s-color" size="lg" />
         </CHeaderToggler>
         <CHeaderBrand className="mx-auto d-md-none" to="/">
-          <CIcon icon={logo} height={48} alt="Logo" />
+          <img src={logo} className="sidebar-brand-full" alt="Logo" height={50} />
         </CHeaderBrand>
         <CHeaderNav className="d-none d-md-flex me-auto">
           <CNavItem>
-            <CNavLink to="/dashboard" component={NavLink} activeClassName="active">
-              <h4 style={{margin: 0}} >Dashboard</h4>
+            <CNavLink >
+              <h4 style={{ margin: 0 }} >{topNavTitile}</h4>
             </CNavLink>
           </CNavItem>
         </CHeaderNav>

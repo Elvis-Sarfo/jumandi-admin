@@ -1,7 +1,18 @@
-import React, { Component } from 'react'
+import React, { useRef, useEffect } from 'react'
+import { CToaster } from '@coreui/react'
+import { useDispatch, useSelector } from 'react-redux'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
-import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap/dist/css/bootstrap.css'
 import './scss/style.scss'
+import { getVendors } from './store/actions/vendors.action'
+import { getUsers } from './store/actions/users.action'
+import { getNationalAdmins } from './store/actions/nationalAdmins.action'
+import { getPrices } from './store/actions/prices.action'
+import { getOrders } from './store/actions/orders.action'
+import { getWithdrawalRequests } from './store/actions/withdrawalRequest.action'
+import { getPayments } from './store/actions/payments.action'
+import { getSales } from './store/actions/sales.action'
+
 
 const loading = (
   <div className="pt-3 text-center">
@@ -18,9 +29,29 @@ const Register = React.lazy(() => import('./views/pages/register/Register'))
 const Page404 = React.lazy(() => import('./views/pages/page404/Page404'))
 const Page500 = React.lazy(() => import('./views/pages/page500/Page500'))
 
-class App extends Component {
-  render() {
-    return (
+const App = () => {
+  const toaster = useRef();
+  // Create the states of the component
+  const dispatch = useDispatch();
+  // const state = useSelector((state) => state.vendors);
+  const toast = useSelector((state) => state.ui.toast);
+
+  useEffect(() => {
+    dispatch(getVendors());
+    dispatch(getUsers());
+    dispatch(getNationalAdmins());
+    dispatch(getPrices());
+    dispatch(getOrders());
+    dispatch(getWithdrawalRequests());
+    dispatch(getPayments());
+    dispatch(getSales());
+    return 0;
+  }, []);
+
+  
+  return (
+    <>
+      <CToaster ref={toaster} push={toast} placement="top-end" />
       <BrowserRouter>
         <React.Suspense fallback={loading}>
           <Switch>
@@ -31,8 +62,8 @@ class App extends Component {
           </Switch>
         </React.Suspense>
       </BrowserRouter>
-    )
-  }
+    </>
+  )
 }
 
 export default App

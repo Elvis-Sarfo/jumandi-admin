@@ -1,17 +1,16 @@
 import React from 'react'
 import { useHistory } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import CustomDataTable from "./../../components/CustomDataTable";
-import data from "./test";
-import CIcon from '@coreui/icons-react'
-import { cilBell, cilEnvelopeOpen, cilList, cilMenu, cibEx } from '@coreui/icons'
+import { Icon, Switch } from '@mui/material';
+import { DeleteForever, Visibility, Edit } from '@mui/icons-material';
+import ReactCountryFlag from "react-country-flag";
+import { updateNationalAdminStatus } from '../../store/actions/nationalAdmins.action';
+
 import {
     CAvatar,
     CButton,
     CButtonGroup,
-    CCard,
-    CCardBody,
-    CCardFooter,
-    CCardHeader,
     CCol,
     CRow,
     CWidgetStatsB,
@@ -19,49 +18,113 @@ import {
 
 const NationalAdmins = () => {
     const history = useHistory();
+    const dispatch = useDispatch();
+
+    const nationalAdmins = useSelector((state) => getStructuredData(state.nationalAdmins.data));
+    const dataSummary = useSelector((state) => state.nationalAdmins.summary);
+
+    const totalNationalAdmins = dataSummary?.totalNationalAdmins;
+    const disabledNationalAdmins = dataSummary?.disabledNationalAdmins;
+    const enabledNationalAdmins = dataSummary?.enabledNationalAdmins;
+
+
+    // Structure the data that is coming from firebase
+    function getStructuredData(rawData) {
+        return rawData.map((nationalAdmin) => {
+            return {
+                id: nationalAdmin.id,
+                name: (<>
+                    {nationalAdmin.pictureURL && <CAvatar size="md" src={nationalAdmin.pictureURL} />}
+                    <span style={{ marginLeft: 7 }}>{`
+                        ${nationalAdmin.firstname}
+                         ${nationalAdmin.othername}
+                         ${nationalAdmin.lastname}
+                    `}</span>
+                </>
+                ),
+                contact: (<div className="p-1">
+                    <div className="small text-medium-emphasis">
+                        <span>{nationalAdmin.email}</span><br />
+                        <span>{nationalAdmin.phoneNumber}</span>
+                    </div>
+                </div>),
+                country: (<div className="p-1">
+                    {nationalAdmin.countryCode && <ReactCountryFlag
+                        svg
+                        countryCode={nationalAdmin.countryCode}
+                        style={{
+                            fontSize: '1em',
+                            lineHeight: '1em',
+                        }}
+                        aria-label="United States" />}{' '}
+                    {nationalAdmin.country}
+                </div>),
+                status: (
+                    <Switch
+                        onChange={(e) => {
+                            e.preventDefault();
+                            dispatch(updateNationalAdminStatus(!nationalAdmin.enabled, nationalAdmin.id));
+                        }}
+                        checked={nationalAdmin.enabled}
+                        color="success"
+                    />
+                ),
+                actions: (
+                    <>
+                        <CButtonGroup>
+                            <CButton onClick={() => history.push(`/supervisors/${nationalAdmin.id}`)} color="primary"><Visibility /></CButton>
+                            {/* <CButton color="warning"><Edit/></CButton> */}
+                            <CButton color="danger"><DeleteForever /></CButton>
+                        </CButtonGroup>
+                    </>
+                )
+            };
+        });
+    }
 
     const columns = [
         {
+            name: "ID",
+            grow: 1,
+            selector: (row) => row.id,
+            sortable: true
+        },
+        {
             name: "Name",
-            grow:2,
+            grow: 2,
             selector: (row) => row.name,
             sortable: true
         },
         {
-            name: "Location",
-            grow:2,
-            selector: (row) => row.location,
+            name: "Country",
+            grow: 1,
+            selector: (row) => row.country,
+            sortable: true
+        },
+        {
+            name: "Contact",
+            grow: 1,
+            selector: (row) => row.contact,
             sortable: true,
             // center: true,
         },
         {
             name: "Status",
-            grow:1,
+            grow: 1,
             selector: (row) => row.status,
             sortable: true,
             // center: true,
         },
         {
-            name: "Approved",
-            grow:1,
-            selector: (row) => row.enable,
-            sortable: true,
-            // center: true,
-        },
-        // {
-        //     cell: () =>  <CButton >Action</CButton>,
-        //     name: 'Status',
-        //     ignoreRowClick: true,
-        //     allowOverflow: true,
-        //     button: true,
-        // },
-        {
-            cell: () =>  <CButton >Action</CButton>,
+            name: 'Actions',
             ignoreRowClick: true,
+            selector: (row) => row.actions,
             allowOverflow: true,
-            button: true,
+            grow: 1,
+            center: true,
         },
     ];
+
     return (
         <>
             <CRow>
@@ -70,35 +133,35 @@ const NationalAdmins = () => {
                 </CCol>
             </CRow>
             <br />
-            {/* <CRow>
+            <CRow>
                 <CCol xs={4}>
                     <CWidgetStatsB
                         className="mb-3"
-                        progress={{ color: 'warning', value: 40 }}
-                        text="40% vendors pending approval"
-                        title="New Requests"
-                        value="20"
+                        progress={{ color: 'warning', value: parseFloat(disabledNationalAdmins?.percentage) }}
+                        text={`${disabledNationalAdmins?.percentage}% Admins Disabled`}
+                        title="Disabled Admins"
+                        value={<b>{disabledNationalAdmins?.value}</b>}
                     />
                 </CCol>
                 <CCol xs={4}>
                     <CWidgetStatsB
                         className="mb-3"
-                        progress={{ color: 'success', value: 60 }}
-                        text="60% vendors approved"
-                        title="Approved Vendors"
-                        value="30"
+                        progress={{ color: 'success', value: parseFloat(enabledNationalAdmins?.percentage) }}
+                        text={`${enabledNationalAdmins?.percentage}% Admins Enabled`}
+                        title="Enabled Admins"
+                        value={<b>{enabledNationalAdmins?.value}</b>}
                     />
                 </CCol>
                 <CCol xs={4}>
                     <CWidgetStatsB
                         className="mb-3"
                         progress={{ color: 'info', value: 100 }}
-                        text="Note: Excluding rejected"
-                        title="Total Vendors"
-                        value="50"
+                        text="All registered Admins"
+                        title="Total Admins"
+                        value={<b>{totalNationalAdmins}</b>}
                     />
                 </CCol>
-            </CRow> */}
+            </CRow>
             <CustomDataTable
                 title="List of Admins"
                 actions={
@@ -112,7 +175,7 @@ const NationalAdmins = () => {
                     </CButton>
                 }
                 columns={columns}
-                data={data}
+                data={nationalAdmins}
                 onChangePage={(page, totalRows) => {
                     console.log(page, totalRows);
                 }}

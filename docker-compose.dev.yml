@@ -1,0 +1,10 @@
+version: "3.8"
+
+services:
+  app:
+    container_name: jumandi-admin-dev
+    image: jumandi-admin-dev
+    build:
+      context: .
+      target: development
+    stdin_open: true

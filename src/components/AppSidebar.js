@@ -9,7 +9,7 @@ import { AppSidebarNav } from './AppSidebarNav'
 import { logoNegative } from './../assets/brand/logo-negative'
 import { sygnet } from './../assets/brand/sygnet'
 
-import logo from './../assets/images/logo_color.png'
+import logo from './../assets/brand/logo_color.png'
 
 import SimpleBar from 'simplebar-react'
 import 'simplebar/dist/simplebar.min.css'
@@ -19,8 +19,8 @@ import navigation from '../_nav'
 
 const AppSidebar = () => {
   const dispatch = useDispatch()
-  const unfoldable = useSelector((state) => state.sidebarUnfoldable)
-  const sidebarShow = useSelector((state) => state.sidebarShow)
+  const unfoldable = useSelector((state) => state.ui.sidebarUnfoldable)
+  const sidebarShow = useSelector((state) => state.ui.sidebarShow)
 
   return (
     <CSidebar

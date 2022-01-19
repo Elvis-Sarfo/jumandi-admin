@@ -35,15 +35,24 @@
     "react-dom": "^17.0.2",
     "react-redux": "^7.2.6",
     "react-router-dom": "^5.3.0",
+    "react-scripts": "^4.0.3",
     "redux": "^4.1.1",
+    "redux-thunk": "^2.4.0",
+    "sass": "^1.43.4",
     "simplebar-react": "^2.3.6",
+    "sweetalert2": "^11.2.0",
+    "sweetalert2-react-content": "^4.2.0",
     "web-vitals": "^1.0.1"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "dev": "docker-compose -f docker-compose.dev.yml up",
+    "start-nginx": "docker build -t jumandi-admin-dev .",
+    "docker-build": "docker-compose -f docker-compose.dev.yml build",
+    "docker-run": "docker run -p 3000:3000 jumandi-admin-dev"
   },
   "eslintConfig": {
     "extends": [
@@ -65,8 +74,6 @@
   },
   "devDependencies": {
     "auto-changelog": "^2.3.0",
-    "faker": "^5.5.3",
-    "react-scripts": "^3.4.4",
-    "sass": "^1.43.4"
+    "faker": "^5.5.3"
   }
 }

@@ -10,6 +10,9 @@ import {
   cilChatBubble,
 } from '@coreui/icons'
 import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
+import {useSelector } from 'react-redux'
+
+
 
 const _nav = [
   {
@@ -18,16 +21,16 @@ const _nav = [
     to: '/dashboard',
     icon: <CIcon icon={cilSpeedometer} customClassName="nav-icon" />,
   },
-  {
-    component: CNavItem,
-    name: 'Live Chats',
-    to: '/chat',
-    icon: <CIcon icon={cilChatBubble} customClassName="nav-icon" />,
-    badge: {
-      color: 'info',
-      text: 'NEW',
-    },
-  },
+  // {
+  //   component: CNavItem,
+  //   name: 'Live Chats',
+  //   to: '/chat',
+  //   icon: <CIcon icon={cilChatBubble} customClassName="nav-icon" />,
+  //   badge: {
+  //     color: 'info',
+  //     text: 'NEW',
+  //   },
+  // },
   {
     component: CNavItem,
     name: 'Sales',
@@ -58,7 +61,7 @@ const _nav = [
     items: [
       {
         component: CNavItem,
-        name: 'General',
+        name: 'General Settings',
         to: '/settings/all',
       },
       {
@@ -76,7 +79,7 @@ const _nav = [
     items: [
       {
         component: CNavItem,
-        name: 'List Admins',
+        name: 'National Admins',
         to: '/national-admins/all',
       },
       {
@@ -93,7 +96,7 @@ const _nav = [
     icon: <CIcon icon={cilBabyCarriage} customClassName="nav-icon" />,
     badge: {
       color: 'success',
-      text: 'NEW',
+      text: 'PENDING',
     },
   },
   {

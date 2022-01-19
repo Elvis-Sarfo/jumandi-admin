@@ -6,5 +6,19 @@
         "reprehenderit",
         "simplebar",
         "sygnet"
-    ]
+    ],
+    "workbench.colorCustomizations": {
+        "sideBar.border": "#fbed80",
+        "tab.activeBorder": "#fbed80",
+        "editorGroup.border": "#fbed80",
+        "sash.hoverBorder": "#fbed80",
+        "statusBar.background": "#f9e64f",
+        "statusBar.debuggingBackground": "#4f62f9",
+        "statusBar.debuggingForeground": "#e7e7e7",
+        "statusBar.foreground": "#15202b",
+        "statusBarItem.hoverBackground": "#f7df1e",
+        "statusBarItem.remoteBackground": "#f9e64f",
+        "statusBarItem.remoteForeground": "#15202b"
+    },
+    "peacock.color": "#f9e64f"
 }

@@ -24,6 +24,7 @@ const VendorDetails = React.lazy(() => import('./views/vendors/VendorDetails'))
 
 const Users = React.lazy(() => import('./views/users/Users'))
 const CreateUsers = React.lazy(() => import('./views/users/CreateUser'))
+const UserDetails = React.lazy(() => import('./views/users/UserDatails'))
 
 
 const routes = [
@@ -60,7 +61,7 @@ const routes = [
   { path: '/users', name: 'Users', component: Users, exact: true },
   { path: '/users/all', name: 'Users', component: Users, exact: true },
   { path: '/users/create', name: 'Users', component: CreateUsers, exact: true  },
-  { path: '/users/:id', name: 'User Details', component: CreateUsers, exact: true },
+  { path: '/users/:id', name: 'User Details', component: UserDetails, exact: true },
 
 ]
 
